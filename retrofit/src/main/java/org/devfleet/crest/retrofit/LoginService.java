@@ -11,12 +11,12 @@ import retrofit2.http.Query;
 
 interface LoginService {
 
-    @POST("/oauth/token")
+    @POST("/oauth/token/")
     Call<CrestToken> getUserToken(@Query("grant_type") String type, @Query("code") String code);
 
-    @POST("/oauth/token")
+    @POST("/oauth/token/")
     Call<CrestToken> getUserTokenUsingRefresh(@Query("grant_type") String type, @Query("refresh_token") String token);
 
-    @GET("/oauth/verify")
+    @GET("/oauth/verify/")
     Call<CrestCharacterStatus> getVerification(@Header("Authorization") String token);
 }

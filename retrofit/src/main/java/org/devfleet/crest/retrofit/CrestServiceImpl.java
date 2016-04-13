@@ -34,13 +34,8 @@ final class CrestServiceImpl extends AbstractCrestService {
     }
 
     @Override
-    public CrestCharacterStatus getCharacterStatus() {
-        return getCharacterStatus(false);
-    }
-
-    @Override
     public CrestCharacter getCharacter() {
-        final CrestCharacterStatus status = getCharacterStatus(true);
+        final CrestCharacterStatus status = getCharacterStatus();
         try {
             final CrestCharacter character = this.authenticatedCrest().getCharacter(status.getCharacterID()).execute().body();
             character.setRefreshToken((null == this.getToken()) ? null : this.getToken().getRefreshToken());
@@ -54,7 +49,7 @@ final class CrestServiceImpl extends AbstractCrestService {
 
     @Override
     public CrestSolarSystem getLocation() {
-        final CrestCharacterStatus status = getCharacterStatus(true);
+        final CrestCharacterStatus status = getCharacterStatus();
         try {
             final CrestLocation location = this.authenticatedCrest().getLocation(status.getCharacterID()).execute().body();
             if ((null == location) || (location.getId() == 0)) {
@@ -70,7 +65,7 @@ final class CrestServiceImpl extends AbstractCrestService {
 
     @Override
     public List<CrestContact> getContacts() {
-        final CrestCharacterStatus status = getCharacterStatus(true);
+        final CrestCharacterStatus status = getCharacterStatus();
         try {
             return this.authenticatedCrest().getContacts(status.getCharacterID()).execute().body().getItems();
         } catch (IOException e) {
@@ -81,7 +76,7 @@ final class CrestServiceImpl extends AbstractCrestService {
 
     @Override
     public List<CrestFitting> getFittings() {
-        final CrestCharacterStatus status = getCharacterStatus(true);
+        final CrestCharacterStatus status = getCharacterStatus();
         try {
             return this.authenticatedCrest().getFittings(status.getCharacterID()).execute().body().getItems();
         } catch (IOException e) {
