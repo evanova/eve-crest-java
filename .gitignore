@@ -3,5 +3,5 @@
 src/main/resources/universeDataDx.db
 .gradle/
 .idea/
-crest-api/build/
-crest-retrofit/build/
+api/build/
+retrofit/build/

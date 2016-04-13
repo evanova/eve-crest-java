@@ -1,2 +1,2 @@
-include "crest-api"
-include "crest-retrofit"
+include "api"
+include "retrofit"

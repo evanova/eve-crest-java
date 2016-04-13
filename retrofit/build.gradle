@@ -5,7 +5,7 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
-    compile project(":crest-api")
+    compile project(":api")
 
     compile 'commons-lang:commons-lang:2.6'
 
