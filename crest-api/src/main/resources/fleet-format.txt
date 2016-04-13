@@ -1,0 +1,281 @@
+http://pastebin.com/sKBvskck
+
+https://api-sisi.testeveonline.com/characters/93512825/
+https://api-sisi.testeveonline.com/fleets/1001711220500/<br>Array
+(
+    [result] => Array
+        (
+            [isVoiceEnabled] =>
+            [motd] =>
+            [isFreeMove] =>
+            [isRegistered] =>
+            [members] => Array
+                (
+                    [href] => https://api-sisi.testeveonline.com/fleets/1001711220500/members/
+                )
+ 
+            [wings] => Array
+                (
+                    [href] => https://api-sisi.testeveonline.com/fleets/1001711220500/wings/
+                )
+ 
+        )
+ 
+    [code] => 200
+    [content_type] => application/vnd.ccp.eve.Fleet-v1+json; charset=utf-8
+)
+Fetching members from https://api-sisi.testeveonline.com/fleets/1001711220500/members/<br>Array
+(
+    [result] => Array
+        (
+            [totalCount_str] => 1
+            [items] => Array
+                (
+                    [0] => Array
+                        (
+                            [takesFleetWarp] => 1
+                            [squadID] => 3001711220500
+                            [solarSystem] => Array
+                                (
+                                    [id_str] => 30000142
+                                    [href] => https://api-sisi.testeveonline.com/solarsystems/30000142/
+                                    [id] => 30000142
+                                    [name] => Jita
+                                )
+ 
+                            [wingID] => 2001711220500
+                            [boosterID_str] => 3
+                            [roleID] => 3
+                            [character] => Array
+                                (
+                                    [name] => Dirin Ikkala
+                                    [isNPC] =>
+                                    [href] => https://api-sisi.testeveonline.com/characters/93512825/
+                                    [id_str] => 93512825
+                                    [id] => 93512825
+                                    [capsuleer] => Array
+                                        (
+                                            [href] => https://api-sisi.testeveonline.com/characters/93512825/capsuleer/
+                                        )
+ 
+                                )
+ 
+                            [boosterID] => 3
+                            [boosterName] => Squad Booster
+                            [href] => https://api-sisi.testeveonline.com/fleets/1001711220500/members/93512825/
+                            [squadID_str] => 3001711220500
+                            [roleName] => Squad Commander (Boss)
+                            [station] => Array
+                                (
+                                    [id_str] => 60003760
+                                    [href] => https://api-sisi.testeveonline.com/stations/60003760/
+                                    [id] => 60003760
+                                    [name] => Jita IV - Moon 4 - Caldari Navy Assembly Plant
+                                )
+ 
+                            [ship] => Array
+                                (
+                                    [id_str] => 601
+                                    [href] => https://api-sisi.testeveonline.com/types/601/
+                                    [id] => 601
+                                    [name] => Ibis
+                                )
+ 
+                            [joinTime] => 2016-04-10T16:24:17
+                            [wingID_str] => 2001711220500
+                            [roleID_str] => 3
+                        )
+ 
+                )
+ 
+            [pageCount] => 1
+            [pageCount_str] => 1
+            [totalCount] => 1
+        )
+ 
+    [code] => 200
+    [content_type] => application/vnd.ccp.eve.FleetMembers-v1+json; charset=utf-8
+)
+Fetching wings from https://api-sisi.testeveonline.com/fleets/1001711220500/wings/<br>Array
+(
+    [result] => Array
+        (
+            [totalCount_str] => 1
+            [items] => Array
+                (
+                    [0] => Array
+                        (
+                            [name] =>
+                            [href] => https://api-sisi.testeveonline.com/fleets/1001711220500/wings/2001711220500/
+                            [squadsList] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [id_str] => 3001711220500
+                                            [href] => https://api-sisi.testeveonline.com/fleets/1001711220500/wings/2001711220500/squads/3001711220500/
+                                            [id] => 3001711220500
+                                            [name] =>
+                                        )
+ 
+                                )
+ 
+                            [id_str] => 2001711220500
+                            [squads] => Array
+                                (
+                                    [href] => https://api-sisi.testeveonline.com/fleets/1001711220500/wings/2001711220500/squads/
+                                )
+ 
+                            [id] => 2001711220500
+                        )
+ 
+                )
+ 
+            [pageCount] => 1
+            [pageCount_str] => 1
+            [totalCount] => 1
+        )
+ 
+    [code] => 200
+    [content_type] => application/vnd.ccp.eve.FleetWings-v1+json; charset=utf-8
+)
+RAW Paste Data
+
+https://api-sisi.testeveonline.com/characters/93512825/
+https://api-sisi.testeveonline.com/fleets/1001711220500/<br>Array
+(
+    [result] => Array
+        (
+            [isVoiceEnabled] => 
+            [motd] => 
+            [isFreeMove] => 
+            [isRegistered] => 
+            [members] => Array
+                (
+                    [href] => https://api-sisi.testeveonline.com/fleets/1001711220500/members/
+                )
+
+            [wings] => Array
+                (
+                    [href] => https://api-sisi.testeveonline.com/fleets/1001711220500/wings/
+                )
+
+        )
+
+    [code] => 200
+    [content_type] => application/vnd.ccp.eve.Fleet-v1+json; charset=utf-8
+)
+Fetching members from https://api-sisi.testeveonline.com/fleets/1001711220500/members/<br>Array
+(
+    [result] => Array
+        (
+            [totalCount_str] => 1
+            [items] => Array
+                (
+                    [0] => Array
+                        (
+                            [takesFleetWarp] => 1
+                            [squadID] => 3001711220500
+                            [solarSystem] => Array
+                                (
+                                    [id_str] => 30000142
+                                    [href] => https://api-sisi.testeveonline.com/solarsystems/30000142/
+                                    [id] => 30000142
+                                    [name] => Jita
+                                )
+
+                            [wingID] => 2001711220500
+                            [boosterID_str] => 3
+                            [roleID] => 3
+                            [character] => Array
+                                (
+                                    [name] => Dirin Ikkala
+                                    [isNPC] => 
+                                    [href] => https://api-sisi.testeveonline.com/characters/93512825/
+                                    [id_str] => 93512825
+                                    [id] => 93512825
+                                    [capsuleer] => Array
+                                        (
+                                            [href] => https://api-sisi.testeveonline.com/characters/93512825/capsuleer/
+                                        )
+
+                                )
+
+                            [boosterID] => 3
+                            [boosterName] => Squad Booster
+                            [href] => https://api-sisi.testeveonline.com/fleets/1001711220500/members/93512825/
+                            [squadID_str] => 3001711220500
+                            [roleName] => Squad Commander (Boss)
+                            [station] => Array
+                                (
+                                    [id_str] => 60003760
+                                    [href] => https://api-sisi.testeveonline.com/stations/60003760/
+                                    [id] => 60003760
+                                    [name] => Jita IV - Moon 4 - Caldari Navy Assembly Plant
+                                )
+
+                            [ship] => Array
+                                (
+                                    [id_str] => 601
+                                    [href] => https://api-sisi.testeveonline.com/types/601/
+                                    [id] => 601
+                                    [name] => Ibis
+                                )
+
+                            [joinTime] => 2016-04-10T16:24:17
+                            [wingID_str] => 2001711220500
+                            [roleID_str] => 3
+                        )
+
+                )
+
+            [pageCount] => 1
+            [pageCount_str] => 1
+            [totalCount] => 1
+        )
+
+    [code] => 200
+    [content_type] => application/vnd.ccp.eve.FleetMembers-v1+json; charset=utf-8
+)
+Fetching wings from https://api-sisi.testeveonline.com/fleets/1001711220500/wings/<br>Array
+(
+    [result] => Array
+        (
+            [totalCount_str] => 1
+            [items] => Array
+                (
+                    [0] => Array
+                        (
+                            [name] => 
+                            [href] => https://api-sisi.testeveonline.com/fleets/1001711220500/wings/2001711220500/
+                            [squadsList] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [id_str] => 3001711220500
+                                            [href] => https://api-sisi.testeveonline.com/fleets/1001711220500/wings/2001711220500/squads/3001711220500/
+                                            [id] => 3001711220500
+                                            [name] => 
+                                        )
+
+                                )
+
+                            [id_str] => 2001711220500
+                            [squads] => Array
+                                (
+                                    [href] => https://api-sisi.testeveonline.com/fleets/1001711220500/wings/2001711220500/squads/
+                                )
+
+                            [id] => 2001711220500
+                        )
+
+                )
+
+            [pageCount] => 1
+            [pageCount_str] => 1
+            [totalCount] => 1
+        )
+
+    [code] => 200
+    [content_type] => application/vnd.ccp.eve.FleetWings-v1+json; charset=utf-8
+)
+                
