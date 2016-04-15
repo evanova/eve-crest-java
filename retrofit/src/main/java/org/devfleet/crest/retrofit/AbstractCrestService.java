@@ -33,15 +33,18 @@ abstract class AbstractCrestService implements CrestService {
         if (StringUtils.isBlank(refreshToken)) {
             setNewToken(null);
         }
-
-        setNewToken(obtainFromRefresh(this.login, refreshToken));
+        else {
+            setNewToken(obtainFromRefresh(this.login, refreshToken));
+        }
     }
 
     public final void setAuthCode(final String authCode) throws IOException {
         if (StringUtils.isBlank(authCode)) {
             setNewToken(null);
         }
-        setNewToken(obtainFromAuth(this.login, authCode));
+        else {
+            setNewToken(obtainFromAuth(this.login, authCode));
+        }
     }
 
     protected final PublicService publicCrest() {
