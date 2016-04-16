@@ -17,6 +17,17 @@ public interface CrestService {
 
     List<CrestContact> getContacts();
 
+    CrestContact getContact(final long contactID);
+
+    boolean addContact(final CrestContact contact);
+
+    boolean deleteContact(final long contactID);
+
     List<CrestFitting> getFittings();
+
+    boolean addFitting(final CrestFitting fitting);
+
+    boolean deleteFitting(final long fittingID);
+
 
 }

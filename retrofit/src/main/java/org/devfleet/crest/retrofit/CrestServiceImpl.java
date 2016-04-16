@@ -18,8 +18,14 @@ final class CrestServiceImpl extends AbstractCrestService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CrestServiceImpl.class);
 
-    public CrestServiceImpl(final String clientID, final String clientKey) {
-        super(clientID, clientKey);
+    private final String crestHost;
+
+    public CrestServiceImpl( final String loginHost,
+                             final String crestHost,
+                             final String clientID,
+                             final String clientKey) {
+        super(loginHost, crestHost, clientID, clientKey);
+        this.crestHost = crestHost;
     }
 
     @Override
@@ -68,9 +74,49 @@ final class CrestServiceImpl extends AbstractCrestService {
         final CrestCharacterStatus status = getCharacterStatus();
         try {
             return this.authenticatedCrest().getContacts(status.getCharacterID()).execute().body().getItems();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
             throw new IllegalStateException(e.getLocalizedMessage(), e);
+        }
+    }
+
+    @Override
+    public CrestContact getContact(long contactID) {
+        final CrestCharacterStatus status = getCharacterStatus();
+        try {
+            return this.authenticatedCrest().getContact(status.getCharacterID(), contactID).execute().body();
+        }
+        catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
+        }
+    }
+
+    @Override
+    public boolean addContact(CrestContact contact) {
+        final CrestCharacterStatus status = getCharacterStatus();
+        try {
+            //Having to set hrefs is not cool
+            contact.setHref(null);
+            contact.getContact().setHref(href("characters/" + contact.getContact().getId()));
+            return this.authenticatedCrest().postContact(status.getCharacterID(), contact).execute().isSuccessful();
+        }
+        catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteContact(long contactID) {
+        final CrestCharacterStatus status = getCharacterStatus();
+        try {
+            return this.authenticatedCrest().deleteContact(status.getCharacterID(), contactID).execute().isSuccessful();
+        }
+        catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            return false;
         }
     }
 
@@ -85,4 +131,37 @@ final class CrestServiceImpl extends AbstractCrestService {
         }
     }
 
+    @Override
+    public boolean addFitting(CrestFitting fitting) {
+        final CrestCharacterStatus status = getCharacterStatus();
+        try {
+            return this.authenticatedCrest().postFitting(status.getCharacterID(), fitting).execute().isSuccessful();
+        }
+        catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteFitting(long fittingID) {
+        final CrestCharacterStatus status = getCharacterStatus();
+        try {
+            return this.authenticatedCrest().deleteFitting(status.getCharacterID(), fittingID).execute().isSuccessful();
+        }
+        catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            return false;
+        }
+    }
+
+    private String href(String path) {
+        return new StringBuilder()
+            .append("https://")
+            .append(this.crestHost)
+            .append("/")
+            .append(path)
+            .append("/")
+            .toString();
+    }
 }

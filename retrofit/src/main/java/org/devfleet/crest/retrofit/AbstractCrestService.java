@@ -20,13 +20,19 @@ abstract class AbstractCrestService implements CrestService {
     private AuthenticatedService client;
     private CrestToken token;
 
-    public AbstractCrestService(final String clientID, final String clientKey) {
+    private final String crestHost;
+    public AbstractCrestService(
+            final String loginHost,
+            final String crestHost,
+            final String clientID,
+            final String clientKey) {
         Validate.isTrue(StringUtils.isNotBlank(clientID));
         Validate.isTrue(StringUtils.isNotBlank(clientKey));
 
-        this.login = CrestRetrofit.newLogin(clientID, clientKey).create(LoginService.class);
-        this.crest = CrestRetrofit.newClient().create(PublicService.class);
-        this.client = CrestRetrofit.newClient().create(AuthenticatedService.class);
+        this.login = CrestRetrofit.newLogin(loginHost, clientID, clientKey).create(LoginService.class);
+        this.crest = CrestRetrofit.newClient(crestHost).create(PublicService.class);
+        this.client = CrestRetrofit.newClient(crestHost).create(AuthenticatedService.class);
+        this.crestHost = crestHost;
     }
 
     public final void setRefreshToken(final String refreshToken) throws IOException {
@@ -90,10 +96,10 @@ abstract class AbstractCrestService implements CrestService {
     private CrestCharacterStatus setNewToken(final CrestToken token) throws IOException {
         this.token = token;
         if (null == token) {
-            this.client = CrestRetrofit.newClient().create(AuthenticatedService.class);
+            this.client = CrestRetrofit.newClient(this.crestHost, null).create(AuthenticatedService.class);
             return null;
         }
-        this.client = CrestRetrofit.newClient(token.getAccessToken()).create(AuthenticatedService.class);
+        this.client = CrestRetrofit.newClient(this.crestHost, token.getAccessToken()).create(AuthenticatedService.class);
         return this.login.getVerification(token.getAccessToken()).execute().body();
     }
 

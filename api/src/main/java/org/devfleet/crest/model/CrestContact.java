@@ -2,7 +2,7 @@ package org.devfleet.crest.model;
 
 public final class CrestContact extends CrestEntity {
 
-    private double standing;
+    private int standing;
 
     private CrestCharacter character;
 
@@ -10,9 +10,9 @@ public final class CrestContact extends CrestEntity {
 
     private String contactType;
 
-    private boolean watched;
+    private Boolean watched;
 
-    private boolean blocked;
+    private Boolean blocked;
 
     private String href;
 
@@ -24,11 +24,11 @@ public final class CrestContact extends CrestEntity {
         this.href = href;
     }
 
-    public double getStanding() {
+    public int getStanding() {
         return standing;
     }
 
-    public void setStanding(double standing) {
+    public void setStanding(int standing) {
         this.standing = standing;
     }
 
@@ -56,19 +56,19 @@ public final class CrestContact extends CrestEntity {
         this.contactType = contactType;
     }
 
-    public boolean isWatched() {
+    public Boolean getWatched() {
         return watched;
     }
 
-    public void setWatched(boolean watched) {
+    public void setWatched(Boolean watched) {
         this.watched = watched;
     }
 
-    public boolean isBlocked() {
+    public Boolean getBlocked() {
         return blocked;
     }
 
-    public void setBlocked(boolean blocked) {
+    public void setBlocked(Boolean blocked) {
         this.blocked = blocked;
     }
 }
