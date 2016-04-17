@@ -6,6 +6,7 @@ import org.devfleet.crest.model.CrestContact;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
 import org.devfleet.crest.model.CrestFitting;
+import org.devfleet.crest.model.CrestWaypoint;
 
 public interface CrestService {
 
@@ -29,5 +30,6 @@ public interface CrestService {
 
     boolean deleteFitting(final long fittingID);
 
+    boolean addWaypoint(final CrestWaypoint waypoint);
 
 }

@@ -8,6 +8,7 @@ import org.devfleet.crest.model.CrestLocation;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
 
+import org.devfleet.crest.model.CrestWaypoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -148,6 +149,19 @@ final class CrestServiceImpl extends AbstractCrestService {
         final CrestCharacterStatus status = getCharacterStatus();
         try {
             return this.authenticatedCrest().deleteFitting(status.getCharacterID(), fittingID).execute().isSuccessful();
+        }
+        catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean addWaypoint(CrestWaypoint waypoint) {
+        final CrestCharacterStatus status = getCharacterStatus();
+        try {
+            waypoint.getSolarSystem().setHref(href("/solarsystems/" + waypoint.getSolarSystem().getId()));
+            return this.authenticatedCrest().addWaypoint(status.getCharacterID(), waypoint).execute().isSuccessful();
         }
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);

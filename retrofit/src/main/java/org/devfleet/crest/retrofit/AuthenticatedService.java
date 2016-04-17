@@ -8,6 +8,7 @@ import org.devfleet.crest.model.CrestFleet;
 import org.devfleet.crest.model.CrestFleetSquad;
 import org.devfleet.crest.model.CrestFleetWing;
 import org.devfleet.crest.model.CrestLocation;
+import org.devfleet.crest.model.CrestWaypoint;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -27,6 +28,11 @@ interface AuthenticatedService {
     Call<CrestLocation> getLocation(
             @Path("characterId") final long characterId);
 
+    @POST("/characters/{characterId}/navigation/waypoints")
+    Call<Void> addWaypoint(
+            @Path("characterId") final long characterId,
+            @Body final CrestWaypoint waypoint);
+
     @GET("/characters/{characterId}/contacts/")
     Call<CrestDictionary<CrestContact>> getContacts(
             @Path("characterId") final long characterId);
@@ -34,7 +40,7 @@ interface AuthenticatedService {
     @POST("/characters/{characterId}/contacts/{contactId}/")
     Call<CrestContact> getContact(
             @Path("characterId") final long characterId,
-            final @Path("contactId") long contactID);
+            @Path("contactId") final long contactID);
 
     @POST("/characters/{characterId}/contacts/")
     Call<CrestContact> postContact(
