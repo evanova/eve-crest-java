@@ -1,6 +1,6 @@
 package org.devfleet.crest.retrofit;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devfleet.crest.model.CrestContact;
 import org.devfleet.crest.model.CrestItem;
 import org.junit.Assert;
@@ -15,19 +15,6 @@ public class ContactsTest extends AbstractCrestServiceTest {
         }
     }
 
-/*{
- "standing": 10,
- "contactType": "Alliance"
- "contact": {
-   "id_str": "99000003",
-   "href": "http://crest.regner.dev/alliances/99000003/",
-   "name": "One One Corporation Alliance",
-   "id": 99000003
- }
-}
-
-[6:40]
-That is what it should look like*/
     @Test
     public void addContact() {
         final long id = Long.parseLong(property("crest.contact"));
