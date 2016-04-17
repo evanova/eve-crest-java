@@ -30,6 +30,7 @@ public interface CrestService {
 
     boolean deleteFitting(final long fittingID);
 
-    boolean addWaypoint(final CrestWaypoint waypoint);
+    boolean addWaypoints(final List<CrestWaypoint> waypoints);
 
+    boolean setWaypoints(final List<CrestWaypoint> waypoints);
 }

@@ -1,5 +1,7 @@
 package org.devfleet.crest.retrofit;
 
+import org.apache.commons.lang.Validate;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.devfleet.crest.model.CrestCharacter;
 import org.devfleet.crest.model.CrestCharacterStatus;
 import org.devfleet.crest.model.CrestContact;
@@ -157,11 +159,32 @@ final class CrestServiceImpl extends AbstractCrestService {
     }
 
     @Override
-    public boolean addWaypoint(CrestWaypoint waypoint) {
+    public boolean addWaypoints(List<CrestWaypoint> waypoints) {
+        return setWaypoints(waypoints, false);
+    }
+
+    @Override
+    public boolean setWaypoints(final List<CrestWaypoint> waypoints) {
+        return setWaypoints(waypoints, true);
+    }
+
+    private boolean setWaypoints(final List<CrestWaypoint> waypoints, final boolean replace) {
+        Validate.isTrue(!waypoints.isEmpty(), "Waypoint list cannot be empty.");
         final CrestCharacterStatus status = getCharacterStatus();
         try {
-            waypoint.getSolarSystem().setHref(href("/solarsystems/" + waypoint.getSolarSystem().getId()));
-            return this.authenticatedCrest().addWaypoint(status.getCharacterID(), waypoint).execute().isSuccessful();
+            boolean first = replace;
+            for (CrestWaypoint wp: waypoints) {
+                wp.setClearOtherWaypoints(first);
+                wp.setFirst(first);
+                wp.getSolarSystem().setHref(href("/solarsystems/" + wp.getSolarSystem().getId()));
+                first = false;
+
+                if (!this.authenticatedCrest().addWaypoint(status.getCharacterID(), wp).execute().isSuccessful()) {
+                    LOG.error("AddWaypoint failed {}", ToStringBuilder.reflectionToString(wp));
+                    return false;
+                }
+            }
+            return true;
         }
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);

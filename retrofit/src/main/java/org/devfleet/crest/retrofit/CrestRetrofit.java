@@ -102,12 +102,12 @@ final class CrestRetrofit {
 
     private static Retrofit newRetrofit(final OkHttpClient client, final String baseUrl) {
         return
-                new Retrofit.Builder()
-                        .baseUrl(baseUrl)
-                        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                        .addConverterFactory(JacksonConverterFactory.create())
-                        .client(client)
-                        .build();
+            new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create())
+                .client(client)
+                .build();
     }
 
     private static String toAuth(final String clientID, final String clientKey) {
