@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devfleet.crest.model.CrestCharacter;
 import org.devfleet.crest.model.CrestCharacterStatus;
 import org.devfleet.crest.model.CrestContact;
+import org.devfleet.crest.model.CrestDictionary;
 import org.devfleet.crest.model.CrestFitting;
 import org.devfleet.crest.model.CrestLocation;
 import org.devfleet.crest.model.CrestServerStatus;
@@ -39,6 +40,28 @@ final class CrestServiceImpl extends AbstractCrestService {
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
             return null;
+        }
+    }
+
+    @Override
+    public CrestSolarSystem getLocation(long solarSystemId) {
+        try {
+            return this.publicCrest().getSolarSystem(solarSystemId).execute().body();
+        }
+        catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
+        }
+    }
+
+    @Override
+    public List<CrestSolarSystem> getLocations() {
+        try {
+            return this.publicCrest().getSolarSystems().execute().body().getItems();
+        }
+        catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
         }
     }
 

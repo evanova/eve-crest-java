@@ -16,6 +16,10 @@ public interface CrestService {
 
     CrestSolarSystem getLocation();
 
+    CrestSolarSystem getLocation(long solarSystemId);
+
+    List<CrestSolarSystem> getLocations();
+
     List<CrestContact> getContacts();
 
     CrestContact getContact(final long contactID);
