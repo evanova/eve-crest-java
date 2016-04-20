@@ -31,7 +31,7 @@ final CrestClient client =
 
 There are more options available to build a client. Please see [CrestClient.Builder](https://github.com/evanova/eve-crest-java/blob/master/retrofit/src/main/java/org/devfleet/crest/retrofit/CrestClient.java) for more details.
 
-* Obtain a CrestService instance from a CrestClient
+* Obtain a [CrestService](https://github.com/evanova/eve-crest-java/blob/master/api/src/main/java/org/devfleet/crest/CrestService.java) instance from a CrestClient
 ```
  //from a known refresh token
  service = client.fromRefreshToken("Token");
