@@ -17,6 +17,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 interface AuthenticatedService {
 
@@ -35,7 +36,8 @@ interface AuthenticatedService {
 
     @GET("/characters/{characterId}/contacts/")
     Call<CrestDictionary<CrestContact>> getContacts(
-            @Path("characterId") final long characterId);
+            @Path("characterId") final long characterId,
+            @Query("page") final int page);
 
     @POST("/characters/{characterId}/contacts/{contactId}/")
     Call<CrestContact> getContact(
@@ -54,7 +56,8 @@ interface AuthenticatedService {
 
     @GET("/characters/{characterId}/fittings/")
     Call<CrestDictionary<CrestFitting>> getFittings(
-            @Path("characterId") final long characterId);
+            @Path("characterId") final long characterId,
+            @Query("page") final int page);
 
     @POST("/characters/{characterId}/fittings/")
     Call<CrestFitting> postFitting(
@@ -70,7 +73,8 @@ interface AuthenticatedService {
     @GET("/characters/{characterId}/fleets/{fleetId}/")
     Call<CrestDictionary<CrestFleet>> getFleet(
             @Path("characterId") final long charId,
-            @Path("fleetId") final long fleetId);
+            @Path("fleetId") final long fleetId,
+            @Query("page") final int page);
 
     @PUT("/characters/{characterId}/fleets/{fleetId}/")
     Call<Void> putFleet(
@@ -82,8 +86,8 @@ interface AuthenticatedService {
     @GET("/characters/{characterId}/fleets/{fleetId}/members/")
     Call<CrestDictionary<CrestCharacter>> getFleetMembers(
             @Path("characterId") final long charId,
-            @Path("fleetId") final long fleetId
-    );
+            @Path("fleetId") final long fleetId,
+            @Query("page") final int page);
 
     //invite characters to the fleet
     @POST("/characters/{characterId}/fleets/{fleetId}/members/")
@@ -103,7 +107,8 @@ interface AuthenticatedService {
     @GET("/characters/{characterId}/fleets/{fleetId}/wings/")
     Call<CrestDictionary<CrestFleetWing>> getFleetWings(
             @Path("characterId") final long charId,
-            @Path("fleetId") final long fleetId);
+            @Path("fleetId") final long fleetId,
+            @Query("page") final int page);
 
     //create a new wing
     @POST("/characters/{characterId}/fleets/{fleetId}/wings/")

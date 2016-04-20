@@ -6,6 +6,7 @@ import org.devfleet.crest.model.CrestCharacter;
 import org.devfleet.crest.model.CrestCharacterStatus;
 import org.devfleet.crest.model.CrestContact;
 import org.devfleet.crest.model.CrestDictionary;
+import org.devfleet.crest.model.CrestEntity;
 import org.devfleet.crest.model.CrestFitting;
 import org.devfleet.crest.model.CrestLocation;
 import org.devfleet.crest.model.CrestServerStatus;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 final class CrestServiceImpl extends AbstractCrestService {
@@ -99,7 +101,18 @@ final class CrestServiceImpl extends AbstractCrestService {
     public List<CrestContact> getContacts() {
         final CrestCharacterStatus status = getCharacterStatus();
         try {
-            return this.authenticatedCrest().getContacts(status.getCharacterID()).execute().body().getItems();
+            final List<CrestContact> returned = new ArrayList<>();
+
+            CrestDictionary<CrestContact> dictionary;
+            int page = 0;
+            do {
+                page = page + 1;
+                dictionary = this.authenticatedCrest().getContacts(status.getCharacterID(), page).execute().body();
+                returned.addAll(dictionary.getItems());
+            }
+            while (dictionary.getPageCount() > page);
+
+            return returned;
         }
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
@@ -150,7 +163,18 @@ final class CrestServiceImpl extends AbstractCrestService {
     public List<CrestFitting> getFittings() {
         final CrestCharacterStatus status = getCharacterStatus();
         try {
-            return this.authenticatedCrest().getFittings(status.getCharacterID()).execute().body().getItems();
+            final List<CrestFitting> returned = new ArrayList<>();
+
+            CrestDictionary<CrestFitting> dictionary;
+            int page = 0;
+            do {
+                page = page + 1;
+                dictionary = this.authenticatedCrest().getFittings(status.getCharacterID(), page).execute().body();
+                returned.addAll(dictionary.getItems());
+            }
+            while (dictionary.getPageCount() > page);
+
+            return returned;
         } catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
             throw new IllegalStateException(e.getLocalizedMessage(), e);

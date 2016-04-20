@@ -1,5 +1,6 @@
 package org.devfleet.crest.retrofit;
 
+import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devfleet.crest.model.CrestContact;
 import org.devfleet.crest.model.CrestItem;
@@ -20,22 +21,11 @@ public class ContactsTest extends AbstractCrestServiceTest {
     @Test
     @Ignore
     public void addContact() {
-        final long id = Long.parseLong(property("crest.contact"));
+        final List<CrestContact> contacts = service.getContacts();
+        Assert.assertFalse("No contact found. Do you have any friend?", contacts.isEmpty());
 
-        CrestContact contact = service.getContact(id);
-        if (null == contact) {
-            contact = new CrestContact();
-            contact.setContactType("Character");
-            contact.setStanding(10);
-            final CrestItem item = new CrestItem();
-            item.setId(id);
-            item.setName("");//F4 says it should be blank
-            contact.setContact(item);
-        }
-        else {
-            Assert.assertTrue(service.deleteContact(id));
-        }
+        final CrestContact contact = contacts.get(0);
+        Assert.assertTrue(service.deleteContact(contact.getContact().getId()));
         Assert.assertTrue(service.addContact(contact));
-
     }
 }

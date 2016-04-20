@@ -20,7 +20,7 @@ public abstract class AbstractCrestServiceTest {
         properties.load(AbstractCrestServiceTest.class.getResourceAsStream("/crest.properties"));
 
         final CrestClient client =
-                CrestClient.TQ()
+                CrestClient.SISI()
                 .id(property("crest.id"))
                 .key(property("crest.key"))
                 .build();
