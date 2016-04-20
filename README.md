@@ -60,6 +60,11 @@ Then you can run `./gradlew check`
 #### Further documentation
 [Eve Online 3rd Party documentation](https://eveonline-third-party-documentation.readthedocs.org/en/latest/)
 
+#### Contributing
+
+You are encouraged to add more `CrestService` method and/or add new CREST endpoints to the CREST Retrofit interface.
+Ask around on [Slack/#defleet](https://tweetfleet.slack.com/messages/devfleet/) for details.
+
 #### Dependencies
 
 This library uses
