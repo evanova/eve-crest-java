@@ -12,13 +12,26 @@ import java.util.List;
 
 public final class CrestClient {
 
-    private static final String[] SCOPES = {
+    private static final String[] TQ_SCOPES = {
             "publicData",
             "characterContactsRead",
             "characterContactsWrite",
             "characterFittingsRead",
             "characterFittingsWrite",
             "characterNavigationWrite"
+    };
+
+    private static final String[] SISI_SCOPES = {
+            "publicData",
+            "characterContactsRead",
+            "characterContactsWrite",
+            "characterFittingsRead",
+            "characterFittingsWrite",
+            "characterNavigationWrite",
+            "characterOpportunitiesRead",
+            "characterLoyaltyPointsRead",
+            "fleetRead",
+            "fleetWrite"
     };
 
     private static final String TQ_LOGIN = "login.eveonline.com";
@@ -65,10 +78,6 @@ public final class CrestClient {
         public Builder redirect(final String to) {
             this.clientRedirect = to;
             return this;
-        }
-
-        public Builder all() {
-            return scopes(SCOPES);
         }
 
         public Builder scopes(final String... scopes) {
@@ -140,14 +149,14 @@ public final class CrestClient {
         return new Builder()
                 .login(SISI_LOGIN)
                 .api(SISI_CREST)
-                .all();
+                .scopes(SISI_SCOPES);
     }
 
     public static Builder TQ() {
         return new Builder()
                 .login(TQ_LOGIN)
                 .api(TQ_CREST)
-                .all();
+                .scopes(TQ_SCOPES);
     }
 
     public String getLoginUri() {
