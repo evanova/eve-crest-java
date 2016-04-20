@@ -58,7 +58,7 @@ You will need to edit the `crest.properties` file in the test folder and fill it
 Then you can run `./gradlew check`
 
 #### Further documentation
-    [Eve Online 3rd Party documentation](https://eveonline-third-party-documentation.readthedocs.org/en/latest/)
+[Eve Online 3rd Party documentation](https://eveonline-third-party-documentation.readthedocs.org/en/latest/)
 
 #### Dependencies
 
