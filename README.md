@@ -63,7 +63,7 @@ Then you can run `./gradlew check`
 #### Contributing
 
 You are encouraged to add more `CrestService` method and/or add new CREST endpoints to the CREST Retrofit interface.
-Ask around on [Slack/#defleet](https://tweetfleet.slack.com/messages/devfleet/) for details.
+Ask around on [slack/#devfleet](https://tweetfleet.slack.com/messages/devfleet/) for details.
 
 #### Dependencies
 
