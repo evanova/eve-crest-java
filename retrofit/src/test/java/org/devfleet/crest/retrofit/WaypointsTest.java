@@ -6,11 +6,13 @@ import org.devfleet.crest.model.CrestContact;
 import org.devfleet.crest.model.CrestSolarSystem;
 import org.devfleet.crest.model.CrestWaypoint;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class WaypointsTest extends AuthenticatedCRESTTest {
 
     @Test
+    @Ignore
     public void testSetWaypoints() {
        // final CrestSolarSystem jita = new CrestSolarSystem();
       //  jita.setId(30000142);

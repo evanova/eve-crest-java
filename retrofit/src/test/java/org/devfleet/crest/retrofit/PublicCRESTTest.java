@@ -6,6 +6,7 @@ import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public final class PublicCRESTTest extends AbstractCRESTTest {
@@ -18,6 +19,7 @@ public final class PublicCRESTTest extends AbstractCRESTTest {
     }
 
     @Test
+    @Ignore
     public void testLocations() {
         final List<CrestSolarSystem> locations = service.getLocations();
         Assert.assertFalse(locations.isEmpty());
