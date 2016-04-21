@@ -6,8 +6,8 @@ import org.devfleet.crest.model.CrestCharacter;
 import org.devfleet.crest.model.CrestCharacterStatus;
 import org.devfleet.crest.model.CrestContact;
 import org.devfleet.crest.model.CrestDictionary;
-import org.devfleet.crest.model.CrestEntity;
 import org.devfleet.crest.model.CrestFitting;
+import org.devfleet.crest.model.CrestItem;
 import org.devfleet.crest.model.CrestLocation;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
@@ -136,9 +136,18 @@ final class CrestServiceImpl extends AbstractCrestService {
     public boolean addContact(CrestContact contact) {
         final CrestCharacterStatus status = getCharacterStatus();
         try {
-            //Having to set hrefs is not cool
+
+            contact.setBlocked(null);
+            contact.setWatched(null);
             contact.setHref(null);
-            contact.getContact().setHref(href("characters/" + contact.getContact().getId()));
+            contact.setCharacter(null);
+
+            final CrestItem sudo = new CrestItem();
+            sudo.setId(contact.getContact().getId());
+            sudo.setHref(href("characters/" + contact.getContact().getId()));
+            sudo.setName("");
+            contact.setContact(sudo);
+
             return this.authenticatedCrest().postContact(status.getCharacterID(), contact).execute().isSuccessful();
         }
         catch (IOException e) {

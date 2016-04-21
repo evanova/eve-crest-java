@@ -29,7 +29,7 @@ interface AuthenticatedService {
     Call<CrestLocation> getLocation(
             @Path("characterId") final long characterId);
 
-    @POST("/characters/{characterId}/navigation/waypoints")
+    @POST("/characters/{characterId}/navigation/waypoints/")
     Call<Void> addWaypoint(
             @Path("characterId") final long characterId,
             @Body final CrestWaypoint waypoint);

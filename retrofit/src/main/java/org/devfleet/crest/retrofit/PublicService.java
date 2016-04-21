@@ -10,7 +10,7 @@ import retrofit2.http.Path;
 
 interface PublicService {
 
-    @GET("/solarsystems/{solarSystemId}")
+    @GET("/solarsystems/{solarSystemId}/")
     Call<CrestSolarSystem> getSolarSystem(@Path("solarSystemId") long solarSystemId);
 
     @GET("/solarsystems/")

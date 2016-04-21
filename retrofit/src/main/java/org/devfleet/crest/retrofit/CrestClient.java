@@ -156,7 +156,7 @@ public final class CrestClient {
         return new Builder()
                 .login(TQ_LOGIN)
                 .api(TQ_CREST)
-                .scopes(TQ_SCOPES);
+                .scopes();
     }
 
     public String getLoginUri() {

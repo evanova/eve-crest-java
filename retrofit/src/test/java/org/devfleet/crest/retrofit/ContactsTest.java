@@ -3,15 +3,12 @@ package org.devfleet.crest.retrofit;
 import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devfleet.crest.model.CrestContact;
-import org.devfleet.crest.model.CrestItem;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
-public class ContactsTest extends AbstractCrestServiceTest {
+public class ContactsTest extends AuthenticatedCRESTTest {
 
     @Test
-    @Ignore
     public void testContacts() {
         for (CrestContact c: service.getContacts()) {
             System.err.println(ToStringBuilder.reflectionToString(c));
@@ -19,7 +16,6 @@ public class ContactsTest extends AbstractCrestServiceTest {
     }
 
     @Test
-    @Ignore
     public void addContact() {
         final List<CrestContact> contacts = service.getContacts();
         Assert.assertFalse("No contact found. Do you have any friend?", contacts.isEmpty());
