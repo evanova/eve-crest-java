@@ -1,12 +1,14 @@
 package org.devfleet.crest.retrofit;
 
 import org.devfleet.crest.model.CrestDictionary;
+import org.devfleet.crest.model.CrestMarketHistory;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 interface PublicService {
 
@@ -18,5 +20,13 @@ interface PublicService {
 
     @GET("/")
     Call<CrestServerStatus> getServerStatus();
+
+    @GET("/market/{regionId}/types/{itemId}/history/")
+    Call<CrestDictionary<CrestMarketHistory>> getMarketHistory(
+            @Path("regionId") final long regionId,
+            @Path("itemId") final long itemId,
+            @Query("page") final int page);
+
+    //https://public-crest.eveonline.com/market/10000002/orders/buy/?type=http://public-crest.eveonline.com/types/32772/
 
 }

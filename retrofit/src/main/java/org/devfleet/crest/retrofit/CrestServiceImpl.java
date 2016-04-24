@@ -9,6 +9,7 @@ import org.devfleet.crest.model.CrestDictionary;
 import org.devfleet.crest.model.CrestFitting;
 import org.devfleet.crest.model.CrestItem;
 import org.devfleet.crest.model.CrestLocation;
+import org.devfleet.crest.model.CrestMarketHistory;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
 
@@ -184,7 +185,8 @@ final class CrestServiceImpl extends AbstractCrestService {
             while (dictionary.getPageCount() > page);
 
             return returned;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
             throw new IllegalStateException(e.getLocalizedMessage(), e);
         }
@@ -245,6 +247,30 @@ final class CrestServiceImpl extends AbstractCrestService {
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
             return false;
+        }
+    }
+
+    @Override
+    public List<CrestMarketHistory> getMarketHistory(long regionId, long itemId) {
+        try {
+            final List<CrestMarketHistory> returned = new ArrayList<>();
+            CrestDictionary<CrestMarketHistory> dictionary;
+            int page = 0;
+            do {
+                page = page + 1;
+                dictionary = this.publicCrest().getMarketHistory(regionId, itemId, page).execute().body();
+                if (null == dictionary) {
+                    LOG.error("getMarketHistory: null dictionnary {}, {}", regionId, itemId);
+                    break;
+                }
+                returned.addAll(dictionary.getItems());
+            }
+            while (dictionary.getPageCount() > page);
+            return returned;
+        }
+        catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
         }
     }
 

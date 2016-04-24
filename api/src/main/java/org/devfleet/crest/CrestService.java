@@ -3,6 +3,7 @@ package org.devfleet.crest;
 import java.util.List;
 import org.devfleet.crest.model.CrestCharacter;
 import org.devfleet.crest.model.CrestContact;
+import org.devfleet.crest.model.CrestMarketHistory;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
 import org.devfleet.crest.model.CrestFitting;
@@ -37,4 +38,7 @@ public interface CrestService {
     boolean addWaypoints(final List<CrestWaypoint> waypoints);
 
     boolean setWaypoints(final List<CrestWaypoint> waypoints);
+
+    List<CrestMarketHistory> getMarketHistory(final long regionId, final long itemId);
+
 }

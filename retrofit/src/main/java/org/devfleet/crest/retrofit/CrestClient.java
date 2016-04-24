@@ -113,9 +113,6 @@ public final class CrestClient {
             final String[] scopes) {
         Validate.isTrue(StringUtils.isNotBlank(loginHost), "loginHost cannot be empty.");
         Validate.isTrue(StringUtils.isNotBlank(crestHost), "crestHost cannot be empty.");
-        Validate.isTrue(StringUtils.isNotBlank(clientID), "clientID cannot be empty.");
-        Validate.isTrue(StringUtils.isNotBlank(clientKey), "clientKey cannot be empty.");
-        Validate.isTrue(StringUtils.isNotBlank(clientRedirect), "clientRedirect cannot be empty.");
 
         this.loginHost = loginHost;
         this.crestHost = crestHost;
@@ -132,7 +129,7 @@ public final class CrestClient {
                 builder.append("%20");
             }
         }
-        this.loginUri =
+        this.loginUri = (StringUtils.isNoneBlank(clientID, clientKey, clientRedirect)) ?
                 new StringBuilder()
                 .append("https://")
                 .append(this.loginHost)
@@ -142,7 +139,7 @@ public final class CrestClient {
                 .append(this.clientID)
                 .append("&scope=")
                 .append(StringUtils.removeEnd(builder.toString(), "%20"))
-                .toString();
+                .toString() : null;
     }
 
     public static Builder SISI() {

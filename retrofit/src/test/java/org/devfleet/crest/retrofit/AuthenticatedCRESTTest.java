@@ -2,7 +2,6 @@ package org.devfleet.crest.retrofit;
 
 import org.devfleet.crest.CrestService;
 import org.devfleet.crest.model.CrestCharacter;
-import org.devfleet.crest.model.CrestServerStatus;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 
