@@ -2,9 +2,6 @@ package org.devfleet.crest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Created by Jeremy Shore on 4/25/16.
- */
 public class CrestMarketType extends CrestItem {
 
     static class Type extends CrestItem {

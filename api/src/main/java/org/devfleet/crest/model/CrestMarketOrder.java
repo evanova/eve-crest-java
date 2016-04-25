@@ -3,9 +3,6 @@ package org.devfleet.crest.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-/**
- * Created by Jeremy Shore on 4/25/16.
- */
 public class CrestMarketOrder extends CrestItem {
 
     @JsonProperty("buy")
