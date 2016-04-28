@@ -1,33 +1,29 @@
 package org.devfleet.crest.retrofit;
 
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 final class CrestRetrofit {
     private static final Logger LOG = LoggerFactory.getLogger(CrestRetrofit.class);
 
-    private static final String LOGIN = "login.eveonline.com";
-    private static final String CREST = "crest-tq.eveonline.com";
-
     private static final String AGENT = "FleetMob (https://github.com/evanova/eve-fleet-mob)";
 
     private static final class LoginInterceptor implements  Interceptor {
         private final String auth;
+        private final String host;
 
-        public LoginInterceptor(String auth) {
+        public LoginInterceptor(String host, String auth) {
+            this.host = host;
             this.auth = auth;
         }
 
@@ -37,7 +33,7 @@ final class CrestRetrofit {
 
             Request.Builder builder = request.newBuilder()
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                    .addHeader("Host", LOGIN);
+                    .addHeader("Host", host);
 
             if (request.header("Authorization") == null || request.header("Authorization").equals("")) {
                 builder.addHeader("Authorization", "Basic " + auth);
@@ -49,8 +45,9 @@ final class CrestRetrofit {
 
     private static final class ClientInterceptor implements  Interceptor {
         private final String token;
-
-        public ClientInterceptor(String token) {
+        private final String host;
+        public ClientInterceptor(String host, String token) {
+            this.host = host;
             this.token = token;
         }
 
@@ -60,7 +57,7 @@ final class CrestRetrofit {
                     chain
                     .request()
                     .newBuilder()
-                    .addHeader("Host", CREST)
+                    .addHeader("Host", host)
                     .addHeader("User-Agent", AGENT);
             if (StringUtils.isNotBlank(token)) {
                 builder.addHeader("Authorization", "Bearer " + token);
@@ -72,24 +69,24 @@ final class CrestRetrofit {
 
     private CrestRetrofit() {}
 
-    public static Retrofit newLogin(final String clientID, final String clientKey) {
+    public static Retrofit newLogin(final String loginHost, final String clientID, final String clientKey) {
         return newRetrofit(
                 newBuilder()
-                .addInterceptor(new LoginInterceptor(toAuth(clientID, clientKey)))
+                .addInterceptor(new LoginInterceptor(loginHost, toAuth(clientID, clientKey)))
                 .build(),
-                "https://" + LOGIN + "/");
+                "https://" + loginHost + "/");
     }
 
 
-    public static Retrofit newClient() {
-        return newClient(null);
+    public static Retrofit newClient(final String crest) {
+        return newClient(crest, null);
     }
 
-    public static Retrofit newClient(final String token) {
+    public static Retrofit newClient(final String crest, final String token) {
         return newRetrofit(newBuilder()
-                .addInterceptor(new ClientInterceptor(token))
+                .addInterceptor(new ClientInterceptor(crest, token))
                 .build(),
-                "https://" + CREST + "/");
+                "https://" + crest + "/");
     }
 
     private static OkHttpClient.Builder newBuilder() {
@@ -102,12 +99,11 @@ final class CrestRetrofit {
 
     private static Retrofit newRetrofit(final OkHttpClient client, final String baseUrl) {
         return
-                new Retrofit.Builder()
-                        .baseUrl(baseUrl)
-                        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                        .addConverterFactory(JacksonConverterFactory.create())
-                        .client(client)
-                        .build();
+            new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(JacksonConverterFactory.create())
+                .client(client)
+                .build();
     }
 
     private static String toAuth(final String clientID, final String clientKey) {

@@ -16,10 +16,7 @@ public class CrestItem extends CrestEntity {
     @JsonProperty
     private String description;
 
-    @JsonProperty
-    private boolean published = true;
-
-    public final String getRef() {
+    public final String getHref() {
         return href;
     }
 
@@ -27,7 +24,7 @@ public class CrestItem extends CrestEntity {
         return id;
     }
 
-    protected final void setId(final long id) {
+    public final void setId(final long id) {
         this.id = id;
     }
 
@@ -39,7 +36,16 @@ public class CrestItem extends CrestEntity {
         return description;
     }
 
-    public final boolean getPublished() {
-        return published;
+    public void setHref(String href) {
+        this.href = href;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 }

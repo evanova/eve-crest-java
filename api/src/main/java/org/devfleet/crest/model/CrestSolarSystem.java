@@ -16,7 +16,7 @@ public class CrestSolarSystem extends CrestItem {
     private List<String> planetsRef;
 
     @JsonProperty
-    private double securityStatus;
+    private Double securityStatus;
 
     @JsonProperty
     private String securityClass;
@@ -38,7 +38,7 @@ public class CrestSolarSystem extends CrestItem {
         return planetsRef;
     }
 
-    public double getSecurityStatus() {
+    public Double getSecurityStatus() {
         return securityStatus;
     }
 
