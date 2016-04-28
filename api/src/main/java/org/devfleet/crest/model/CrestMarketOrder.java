@@ -36,6 +36,10 @@ public class CrestMarketOrder extends CrestItem {
     @JsonProperty
     private CrestItem type;
 
+    public boolean isBuyOrder() {
+        return this.isBuyOrder;
+    }
+
     public double getPrice() {
         return price;
     }

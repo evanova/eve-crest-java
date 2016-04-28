@@ -1,29 +1,27 @@
 package org.devfleet.crest.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CrestMarketGroup extends CrestItem {
 
-    private String type;
-    private String parent;
+    @JsonProperty
+    CrestItem types;
+    @JsonProperty
+    CrestItem parentGroup;
 
-    @JsonProperty("types")
-    public void setType(List<String> types) {
-        this.type = types.get(0);
+    public String getTypeRef() {
+        return types.getHref();
     }
 
-    @JsonProperty("parentGroup")
-    public void setParent(List<String> parents) {
-        this.parent = parents.get(0);
+    public boolean hasParent() {
+        return parentGroup != null;
     }
 
-    public String getType() {
-        return type;
-    }
+    public String getParentRef() {
+        if (hasParent()) {
+            return parentGroup.getHref();
+        }
 
-    public String getParent() {
-        return parent;
+        return "";
     }
 }
