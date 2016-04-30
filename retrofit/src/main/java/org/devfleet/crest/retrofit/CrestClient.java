@@ -13,26 +13,51 @@ import java.util.List;
 public final class CrestClient {
 
     private static final String[] TQ_SCOPES = {
-            "publicData",
+            "characterAccountRead",
+            "characterAssetsRead",
+            "characterBookmarksRead",
+            "characterCalendarRead",
+            "characterChatChannelsRead",
+            "characterClonesRead",
             "characterContactsRead",
             "characterContactsWrite",
+            "characterContractsRead",
+            "characterFactionalWarfareRead",
             "characterFittingsRead",
             "characterFittingsWrite",
-            "characterNavigationWrite"
+            "characterIndustryJobsRead",
+            "characterKillsRead",
+            "characterLocationRead",
+            "characterLoyaltyPointsRead",
+            "characterMailRead",
+            "characterMarketOrdersRead",
+            "characterMedalsRead",
+            "characterNavigationWrite",
+            "characterNotificationsRead",
+            "characterOpportunitiesRead",
+            "characterResearchRead",
+            "characterSkillsRead",
+            "characterStatsRead",
+            "characterWalletRead",
+            "corporationAssetRead",
+            "corporationBookmarksRead",
+            "corporationContractsRead",
+            "corporationFactionalWarfareRead",
+            "corporationIndustryJobsRead",
+            "corporationKillsRead",
+            "corporationMarketOrdersRead",
+            "corporationMedalsRead",
+            "corporationMembersRead",
+            "corporationShareholdersRead",
+            "corporationStructuresRead",
+            "corporationWalletRead",
+            "fleetRead",
+            "fleetWrite",
+            "publicData",
+            "structureVulnUpdate"
     };
 
-    private static final String[] SISI_SCOPES = {
-            "publicData",
-            "characterContactsRead",
-            "characterContactsWrite",
-            "characterFittingsRead",
-            "characterFittingsWrite",
-            "characterNavigationWrite",
-            "characterOpportunitiesRead",
-            "characterLoyaltyPointsRead",
-            "fleetRead",
-            "fleetWrite"
-    };
+    private static final String[] SISI_SCOPES = TQ_SCOPES;//currently the same; this may change
 
     private static final String TQ_LOGIN = "login.eveonline.com";
     private static final String TQ_CREST = "crest-tq.eveonline.com";
