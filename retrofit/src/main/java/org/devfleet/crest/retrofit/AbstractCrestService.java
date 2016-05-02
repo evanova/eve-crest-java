@@ -50,7 +50,7 @@ abstract class AbstractCrestService implements CrestService {
 
     public final void setAuthCode(final String authCode) throws IOException {
         if (null == this.loginService) {
-            throw new IOException("setRefreshToken: no login service without a client id/key.");
+            throw new IOException("setAuthCode: no login service without a client id/key.");
         }
         if (StringUtils.isBlank(authCode)) {
             setNewToken(null);
@@ -58,6 +58,10 @@ abstract class AbstractCrestService implements CrestService {
         else {
             setNewToken(obtainFromAuth(this.loginService, authCode));
         }
+    }
+
+    public final void setAccessToken(final CrestToken token) throws IOException {
+        setNewToken(token);
     }
 
     protected final PublicService publicCrest() {
@@ -70,7 +74,7 @@ abstract class AbstractCrestService implements CrestService {
 
     protected CrestCharacterStatus getCharacterStatus() {
         if (null == this.loginService) {
-            throw new IllegalStateException("Not login service");
+            throw new IllegalStateException("No login service");
         }
         if (null == this.token) {
             throw new IllegalStateException("Not authenticated");
@@ -94,7 +98,7 @@ abstract class AbstractCrestService implements CrestService {
             }
             catch (IOException e2) {
                 LOG.error(e2.getLocalizedMessage());
-                return null;
+                throw new IllegalStateException(e.getLocalizedMessage());
             }
         }
     }

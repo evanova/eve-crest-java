@@ -21,6 +21,9 @@ public class CrestCharacter extends CrestItem {
     @JsonIgnore
     private String refreshToken;
 
+    @JsonIgnore
+    private String accessToken;
+
     public boolean getNPC() {
         return isNPC;
     }
@@ -39,5 +42,13 @@ public class CrestCharacter extends CrestItem {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }

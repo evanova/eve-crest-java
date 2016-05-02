@@ -74,6 +74,7 @@ final class CrestServiceImpl extends AbstractCrestService {
         try {
             final CrestCharacter character = this.authenticatedCrest().getCharacter(status.getCharacterID()).execute().body();
             character.setRefreshToken((null == this.getToken()) ? null : this.getToken().getRefreshToken());
+            character.setAccessToken((null == this.getToken()) ? null : this.getToken().getAccessToken());
             return character;
         }
         catch (IOException e) {

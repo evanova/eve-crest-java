@@ -1,18 +1,61 @@
 package org.devfleet.crest.retrofit;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.devfleet.crest.CrestService;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import org.devfleet.crest.model.CrestToken;
 
 public final class CrestClient {
 
-    private static final String[] TQ_SCOPES = {
+    private static final Map<String, Long> MASKS;
+    static {
+        MASKS = new HashMap<>();
+        MASKS.put("characterWalletRead", 1l | 2097152l | 4194304l);
+        MASKS.put("characterAssetsRead", 2l | 134217728l);
+        MASKS.put("characterCalendarRead", 4l | 1048576l);
+        MASKS.put("characterContactsRead", 16l | 32l | 524288l);
+        MASKS.put("characterFactionalWarfareRead", 64l);
+        MASKS.put("characterIndustryJobsRead", 128l);
+        MASKS.put("characterKillsRead", 256l);
+        MASKS.put("characterMailRead", 512l | 1024l | 2048l);
+        MASKS.put("characterMarketOrdersRead", 4096l);
+        MASKS.put("characterMedalsRead", 8192l);
+        MASKS.put("characterNotificationsRead", 16384l | 32768l);
+        MASKS.put("characterResearchRead", 65536l);
+        MASKS.put("characterSkillsRead", 131072l | 262144l | 1073741824l);
+        MASKS.put("characterAccountRead", 33554432l);
+        MASKS.put("characterContractsRead", 67108864l);
+        MASKS.put("characterBookmarksRead", 268435456l);
+        MASKS.put("characterChatChannelsRead", 536870912l);
+        MASKS.put("characterClonesRead", 2147483648l);
+
+        MASKS.put("corporationWalletRead", 1l | 8l | 1048576l | 2097152l);
+        MASKS.put("corporationAssetsRead", 2l | 32l | 16777216l);
+        MASKS.put("corporationMedalsRead", 4l | 8192l);
+        MASKS.put("corporationContactsRead", 16l | 262144l);
+        MASKS.put("corporationFactionalWarfareRead", 64l);
+        MASKS.put("corporationIndustryJobsRead", 128l);
+        MASKS.put("corporationKillsRead", 256l);
+        MASKS.put("corporationMembersRead", 512l | 1024l | 2048l | 4194304l | 33554432l);
+        MASKS.put("corporationMarketOrdersRead", 4096l);
+        MASKS.put("corporationStructuresRead", 16384l | 32768l | 131072l);
+        MASKS.put("corporationShareholdersRead", 65536l);
+        MASKS.put("corporationContractsRead", 8388608l);
+        MASKS.put("corporationBookmarksRead", 67108864l);
+    };
+
+    public static final String[] PUBLIC_SCOPES = {
+            "publicData"
+    };
+
+    public static final String[] CHARACTER_SCOPES = {
             "characterAccountRead",
             "characterAssetsRead",
             "characterBookmarksRead",
@@ -39,6 +82,12 @@ public final class CrestClient {
             "characterSkillsRead",
             "characterStatsRead",
             "characterWalletRead",
+            "fleetRead",
+            "fleetWrite",
+            "structureVulnUpdate"
+    };
+
+    public static final String[] CORPORATION_SCOPES = {
             "corporationAssetRead",
             "corporationBookmarksRead",
             "corporationContractsRead",
@@ -51,13 +100,8 @@ public final class CrestClient {
             "corporationShareholdersRead",
             "corporationStructuresRead",
             "corporationWalletRead",
-            "fleetRead",
-            "fleetWrite",
-            "publicData",
             "structureVulnUpdate"
     };
-
-    private static final String[] SISI_SCOPES = TQ_SCOPES;//currently the same; this may change
 
     private static final String TQ_LOGIN = "login.eveonline.com";
     private static final String TQ_CREST = "crest-tq.eveonline.com";
@@ -77,7 +121,7 @@ public final class CrestClient {
 
         public Builder() {
             this.scopes = new ArrayList<>();
-            this.scopes.add("publicData");
+            this.scopes.addAll(Arrays.asList(PUBLIC_SCOPES));
         }
 
         public Builder login(final String host) {
@@ -106,8 +150,11 @@ public final class CrestClient {
         }
 
         public Builder scopes(final String... scopes) {
-            this.scopes.clear();
-            this.scopes.addAll(Arrays.asList(scopes));
+            for (String s: scopes) {
+                if (!this.scopes.contains(s)) {
+                    this.scopes.add(s);
+                }
+            }
             return this;
         }
 
@@ -128,6 +175,9 @@ public final class CrestClient {
     private final String crestHost;
 
     private final String loginUri;
+
+    private final long characterAccessMask;
+    private final long corporationAccessMask;
 
     private CrestClient(
             final String loginHost,
@@ -154,35 +204,53 @@ public final class CrestClient {
                 builder.append("%20");
             }
         }
-        this.loginUri = (StringUtils.isNoneBlank(clientID, clientKey, clientRedirect)) ?
-                new StringBuilder()
-                .append("https://")
-                .append(this.loginHost)
-                .append("/oauth/authorize/?response_type=code&redirect_uri=")
-                .append(clientRedirect)
-                .append("&client_id=")
-                .append(this.clientID)
-                .append("&scope=")
-                .append(StringUtils.removeEnd(builder.toString(), "%20"))
-                .toString() : null;
+        if (StringUtils.isBlank(clientID) || StringUtils.isBlank(clientKey) || StringUtils.isBlank(clientRedirect)) {
+            this.loginUri = null;
+        }
+        else {
+            this.loginUri =
+                    new StringBuilder()
+                    .append("https://")
+                    .append(this.loginHost)
+                    .append("/oauth/authorize/?response_type=code&redirect_uri=")
+                    .append(clientRedirect)
+                    .append("&client_id=")
+                    .append(this.clientID)
+                    .append("&scope=")
+                    .append(StringUtils.removeEnd(builder.toString(), "%20"))
+                    .toString();
+        }
+
+        this.characterAccessMask = toAccessMask(scopes, CHARACTER_SCOPES);
+        this.corporationAccessMask = toAccessMask(scopes, CORPORATION_SCOPES);
     }
 
     public static Builder SISI() {
         return new Builder()
                 .login(SISI_LOGIN)
                 .api(SISI_CREST)
-                .scopes(SISI_SCOPES);
+                .scopes(CORPORATION_SCOPES)
+                .scopes(CHARACTER_SCOPES);
     }
 
     public static Builder TQ() {
         return new Builder()
                 .login(TQ_LOGIN)
                 .api(TQ_CREST)
-                .scopes();
+                .scopes(CORPORATION_SCOPES)
+                .scopes(CHARACTER_SCOPES);
     }
 
     public String getLoginUri() {
         return this.loginUri;
+    }
+
+    public long getCharacterAccessMask() {
+        return characterAccessMask;
+    }
+
+    public long getCorporationAccessMask() {
+        return corporationAccessMask;
     }
 
     public CrestService fromDefault() throws IOException {
@@ -193,6 +261,12 @@ public final class CrestClient {
     public CrestService fromRefreshToken(final String token) throws IOException {
         final CrestServiceImpl service = newService();
         service.setRefreshToken(token);
+        return service;
+    }
+
+    public CrestService fromAccessToken(final CrestToken token) throws IOException {
+        final CrestServiceImpl service = newService();
+        service.setAccessToken(token);
         return service;
     }
 
@@ -210,4 +284,16 @@ public final class CrestClient {
                 this.clientKey);
     }
 
+    private static long toAccessMask(final String[] scopes, final String[] ref) {
+        long mask = 0;
+        for (String scope: scopes) {
+            if (ArrayUtils.contains(ref, scope)) {
+                Long value = MASKS.get(scope);
+                if (null != value) {
+                    mask = mask | value;
+                }
+            }
+        }
+        return mask;
+    }
 }
