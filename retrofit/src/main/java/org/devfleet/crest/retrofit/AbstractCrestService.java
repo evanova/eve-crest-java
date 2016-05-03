@@ -27,10 +27,13 @@ abstract class AbstractCrestService implements CrestService {
             final String clientID,
             final String clientKey) {
 
-        this.loginService =
-                (StringUtils.isNoneBlank(clientID, clientKey)) ?
-                CrestRetrofit.newLogin(loginHost, clientID, clientKey).create(LoginService.class) :
-                null;
+        if (StringUtils.isBlank(clientID) || StringUtils.isBlank(clientKey)) {
+            this.loginService = null;
+        }
+        else {
+            this.loginService = CrestRetrofit.newLogin(loginHost, clientID, clientKey).create(LoginService.class);
+        }
+         
         this.publicService = CrestRetrofit.newClient(crestHost).create(PublicService.class);
         this.authService = CrestRetrofit.newClient(crestHost).create(AuthenticatedService.class);
         this.crestHost = crestHost;
