@@ -1,7 +1,7 @@
 package org.devfleet.crest.retrofit;
 
-import org.apache.commons.lang.Validate;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devfleet.crest.model.CrestCharacter;
 import org.devfleet.crest.model.CrestCharacterStatus;
 import org.devfleet.crest.model.CrestContact;

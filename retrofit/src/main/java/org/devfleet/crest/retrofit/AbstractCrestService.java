@@ -2,7 +2,8 @@ package org.devfleet.crest.retrofit;
 
 import java.io.IOException;
 
-import org.apache.commons.lang.StringUtils;
+
+import org.apache.commons.lang3.StringUtils;
 import org.devfleet.crest.CrestService;
 import org.devfleet.crest.model.CrestCharacterStatus;
 import org.devfleet.crest.model.CrestToken;
