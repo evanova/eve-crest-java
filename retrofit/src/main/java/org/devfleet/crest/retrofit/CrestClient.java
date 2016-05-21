@@ -13,10 +13,18 @@ import org.devfleet.crest.CrestService;
 import org.devfleet.crest.model.CrestToken;
 
 public final class CrestClient {
-
+//characterFittingsRead
+    //characterLocationRead
+    //characterLoyaltyPointsRead
+    ///characterOpportunitiesRead
+    ///characterStatsRead
+    //fleetread
+    //structureVulnUpdate
     private static final Map<String, Long> MASKS;
     static {
         MASKS = new HashMap<>();
+        MASKS.put("characterAccountRead", 33554432l);
+        MASKS.put("characterStatsRead", 16777216l);
         MASKS.put("characterWalletRead", 1l | 2097152l | 4194304l);
         MASKS.put("characterAssetsRead", 2l | 134217728l);
         MASKS.put("characterCalendarRead", 4l | 1048576l);
@@ -194,33 +202,12 @@ public final class CrestClient {
         this.clientID = clientID;
         this.clientKey = clientKey;
 
-        StringBuilder builder = new StringBuilder();
-        if (ArrayUtils.isEmpty(scopes)) {
-            builder.append("publicData");
-        }
-        else {
-            for (String scope: scopes) {
-                builder.append(scope);
-                builder.append("%20");
-            }
-        }
-        if (StringUtils.isBlank(clientID) || StringUtils.isBlank(clientKey) || StringUtils.isBlank(clientRedirect)) {
-            this.loginUri = null;
-        }
-        else {
-            this.loginUri =
-                    new StringBuilder()
-                    .append("https://")
-                    .append(this.loginHost)
-                    .append("/oauth/authorize/?response_type=code&redirect_uri=")
-                    .append(clientRedirect)
-                    .append("&client_id=")
-                    .append(this.clientID)
-                    .append("&scope=")
-                    .append(StringUtils.removeEnd(builder.toString(), "%20"))
-                    .toString();
-        }
-
+        this.loginUri = getLoginUri(
+                    loginHost,
+                    clientID,
+                    clientKey,
+                    clientRedirect,
+                    scopes);
         this.characterAccessMask = toAccessMask(scopes, CHARACTER_SCOPES);
         this.corporationAccessMask = toAccessMask(scopes, CORPORATION_SCOPES);
     }
@@ -233,12 +220,61 @@ public final class CrestClient {
                 .scopes(CHARACTER_SCOPES);
     }
 
+    public static Builder SISI(String... scopes) {
+        return new Builder()
+                .login(SISI_LOGIN)
+                .api(SISI_CREST)
+                .scopes(scopes);
+    }
+
+    public static Builder TQ(String... scopes) {
+        return new Builder()
+                .login(TQ_LOGIN)
+                .api(TQ_CREST)
+                .scopes(scopes);
+    }
+
     public static Builder TQ() {
         return new Builder()
                 .login(TQ_LOGIN)
                 .api(TQ_CREST)
                 .scopes(CORPORATION_SCOPES)
                 .scopes(CHARACTER_SCOPES);
+    }
+
+    public static String getLoginUri(
+             final String loginHost,
+             final String clientID,
+             final String clientKey,
+             final String clientRedirect,
+             final String[] scopes) {
+
+        if (StringUtils.isBlank(clientID) || StringUtils.isBlank(clientKey) || StringUtils.isBlank(clientRedirect)) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder();
+        if (ArrayUtils.isEmpty(scopes)) {
+            builder.append("publicData");
+        }
+        else {
+            for (String scope: scopes) {
+                builder.append(scope);
+                builder.append("%20");
+            }
+        }
+
+        return
+            new StringBuilder()
+            .append("https://")
+            .append(loginHost)
+            .append("/oauth/authorize/?response_type=code&redirect_uri=")
+            .append(clientRedirect)
+            .append("&client_id=")
+            .append(clientID)
+            .append("&scope=")
+            .append(StringUtils.removeEnd(builder.toString(), "%20"))
+            .toString();
     }
 
     public String getLoginUri() {
