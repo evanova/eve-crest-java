@@ -3,113 +3,15 @@ package org.devfleet.crest.retrofit;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
+import org.devfleet.crest.CrestAccess;
 import org.devfleet.crest.CrestService;
 import org.devfleet.crest.model.CrestToken;
 
 public final class CrestClient {
-//characterFittingsRead
-    //characterLocationRead
-    //characterLoyaltyPointsRead
-    ///characterOpportunitiesRead
-    ///characterStatsRead
-    //fleetread
-    //structureVulnUpdate
-    private static final Map<String, Long> MASKS;
-    static {
-        MASKS = new HashMap<>();
-        MASKS.put("characterAccountRead", 33554432l);
-        MASKS.put("characterStatsRead", 16777216l);
-        MASKS.put("characterWalletRead", 1l | 2097152l | 4194304l);
-        MASKS.put("characterAssetsRead", 2l | 134217728l);
-        MASKS.put("characterCalendarRead", 4l | 1048576l);
-        MASKS.put("characterContactsRead", 16l | 32l | 524288l);
-        MASKS.put("characterFactionalWarfareRead", 64l);
-        MASKS.put("characterIndustryJobsRead", 128l);
-        MASKS.put("characterKillsRead", 256l);
-        MASKS.put("characterMailRead", 512l | 1024l | 2048l);
-        MASKS.put("characterMarketOrdersRead", 4096l);
-        MASKS.put("characterMedalsRead", 8192l);
-        MASKS.put("characterNotificationsRead", 16384l | 32768l);
-        MASKS.put("characterResearchRead", 65536l);
-        MASKS.put("characterSkillsRead", 131072l | 262144l | 1073741824l);
-        MASKS.put("characterAccountRead", 33554432l);
-        MASKS.put("characterContractsRead", 67108864l);
-        MASKS.put("characterBookmarksRead", 268435456l);
-        MASKS.put("characterChatChannelsRead", 536870912l);
-        MASKS.put("characterClonesRead", 2147483648l);
-
-        MASKS.put("corporationWalletRead", 1l | 8l | 1048576l | 2097152l);
-        MASKS.put("corporationAssetsRead", 2l | 32l | 16777216l);
-        MASKS.put("corporationMedalsRead", 4l | 8192l);
-        MASKS.put("corporationContactsRead", 16l | 262144l);
-        MASKS.put("corporationFactionalWarfareRead", 64l);
-        MASKS.put("corporationIndustryJobsRead", 128l);
-        MASKS.put("corporationKillsRead", 256l);
-        MASKS.put("corporationMembersRead", 512l | 1024l | 2048l | 4194304l | 33554432l);
-        MASKS.put("corporationMarketOrdersRead", 4096l);
-        MASKS.put("corporationStructuresRead", 16384l | 32768l | 131072l);
-        MASKS.put("corporationShareholdersRead", 65536l);
-        MASKS.put("corporationContractsRead", 8388608l);
-        MASKS.put("corporationBookmarksRead", 67108864l);
-    };
-
-    public static final String[] PUBLIC_SCOPES = {
-            "publicData"
-    };
-
-    public static final String[] CHARACTER_SCOPES = {
-            "characterAccountRead",
-            "characterAssetsRead",
-            "characterBookmarksRead",
-            "characterCalendarRead",
-            "characterChatChannelsRead",
-            "characterClonesRead",
-            "characterContactsRead",
-            "characterContactsWrite",
-            "characterContractsRead",
-            "characterFactionalWarfareRead",
-            "characterFittingsRead",
-            "characterFittingsWrite",
-            "characterIndustryJobsRead",
-            "characterKillsRead",
-            "characterLocationRead",
-            "characterLoyaltyPointsRead",
-            "characterMailRead",
-            "characterMarketOrdersRead",
-            "characterMedalsRead",
-            "characterNavigationWrite",
-            "characterNotificationsRead",
-            "characterOpportunitiesRead",
-            "characterResearchRead",
-            "characterSkillsRead",
-            "characterStatsRead",
-            "characterWalletRead",
-            "fleetRead",
-            "fleetWrite",
-            "structureVulnUpdate"
-    };
-
-    public static final String[] CORPORATION_SCOPES = {
-            "corporationAssetRead",
-            "corporationBookmarksRead",
-            "corporationContractsRead",
-            "corporationFactionalWarfareRead",
-            "corporationIndustryJobsRead",
-            "corporationKillsRead",
-            "corporationMarketOrdersRead",
-            "corporationMedalsRead",
-            "corporationMembersRead",
-            "corporationShareholdersRead",
-            "corporationStructuresRead",
-            "corporationWalletRead",
-            "structureVulnUpdate"
-    };
 
     private static final String TQ_LOGIN = "login.eveonline.com";
     private static final String TQ_CREST = "crest-tq.eveonline.com";
@@ -129,7 +31,7 @@ public final class CrestClient {
 
         public Builder() {
             this.scopes = new ArrayList<>();
-            this.scopes.addAll(Arrays.asList(PUBLIC_SCOPES));
+            this.scopes.addAll(Arrays.asList(CrestAccess.PUBLIC_SCOPES));
         }
 
         public Builder login(final String host) {
@@ -208,16 +110,16 @@ public final class CrestClient {
                     clientKey,
                     clientRedirect,
                     scopes);
-        this.characterAccessMask = toAccessMask(scopes, CHARACTER_SCOPES);
-        this.corporationAccessMask = toAccessMask(scopes, CORPORATION_SCOPES);
+        this.characterAccessMask = toAccessMask(scopes, CrestAccess.CHARACTER_SCOPES);
+        this.corporationAccessMask = toAccessMask(scopes, CrestAccess.CORPORATION_SCOPES);
     }
 
     public static Builder SISI() {
         return new Builder()
                 .login(SISI_LOGIN)
                 .api(SISI_CREST)
-                .scopes(CORPORATION_SCOPES)
-                .scopes(CHARACTER_SCOPES);
+                .scopes(CrestAccess.CORPORATION_SCOPES)
+                .scopes(CrestAccess.CHARACTER_SCOPES);
     }
 
     public static Builder SISI(String... scopes) {
@@ -238,8 +140,8 @@ public final class CrestClient {
         return new Builder()
                 .login(TQ_LOGIN)
                 .api(TQ_CREST)
-                .scopes(CORPORATION_SCOPES)
-                .scopes(CHARACTER_SCOPES);
+                .scopes(CrestAccess.CORPORATION_SCOPES)
+                .scopes(CrestAccess.CHARACTER_SCOPES);
     }
 
     public static String getLoginUri(
@@ -324,7 +226,7 @@ public final class CrestClient {
         long mask = 0;
         for (String scope: scopes) {
             if (ArrayUtils.contains(ref, scope)) {
-                Long value = MASKS.get(scope);
+                Long value = CrestAccess.MASKS.get(scope);
                 if (null != value) {
                     mask = mask | value;
                 }

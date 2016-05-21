@@ -1,7 +1,7 @@
 package org.devfleet.crest.retrofit;
 
 import java.util.Properties;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.junit.Assert;
 import org.junit.BeforeClass;
