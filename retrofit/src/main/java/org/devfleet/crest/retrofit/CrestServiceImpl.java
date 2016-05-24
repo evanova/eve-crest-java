@@ -1,5 +1,8 @@
 package org.devfleet.crest.retrofit;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devfleet.crest.model.CrestCharacter;
@@ -12,14 +15,9 @@ import org.devfleet.crest.model.CrestLocation;
 import org.devfleet.crest.model.CrestMarketHistory;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
-
 import org.devfleet.crest.model.CrestWaypoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 final class CrestServiceImpl extends AbstractCrestService {
 
@@ -47,7 +45,7 @@ final class CrestServiceImpl extends AbstractCrestService {
     }
 
     @Override
-    public CrestSolarSystem getLocation(long solarSystemId) {
+    public CrestSolarSystem getSolarSystem(long solarSystemId) {
         try {
             return this.publicCrest().getSolarSystem(solarSystemId).execute().body();
         }
@@ -84,14 +82,10 @@ final class CrestServiceImpl extends AbstractCrestService {
     }
 
     @Override
-    public CrestSolarSystem getLocation() {
+    public CrestLocation getLocation() {
         final CrestCharacterStatus status = getCharacterStatus();
         try {
-            final CrestLocation location = this.authenticatedCrest().getLocation(status.getCharacterID()).execute().body();
-            if ((null == location) || (location.getId() == 0)) {
-                return null;
-            }
-            return this.publicCrest().getSolarSystem(location.getId()).execute().body();
+            return this.authenticatedCrest().getLocation(status.getCharacterID()).execute().body();
         }
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);

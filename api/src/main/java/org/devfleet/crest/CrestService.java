@@ -3,6 +3,7 @@ package org.devfleet.crest;
 import java.util.List;
 import org.devfleet.crest.model.CrestCharacter;
 import org.devfleet.crest.model.CrestContact;
+import org.devfleet.crest.model.CrestLocation;
 import org.devfleet.crest.model.CrestMarketHistory;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
@@ -15,9 +16,9 @@ public interface CrestService {
 
     CrestCharacter getCharacter();
 
-    CrestSolarSystem getLocation();
+    CrestLocation getLocation();
 
-    CrestSolarSystem getLocation(long solarSystemId);
+    CrestSolarSystem getSolarSystem(long solarSystemId);
 
     List<CrestSolarSystem> getLocations();
 
