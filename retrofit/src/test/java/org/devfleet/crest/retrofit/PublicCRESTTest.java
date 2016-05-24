@@ -23,7 +23,7 @@ public final class PublicCRESTTest {
     public void testLocations() {
         final List<CrestSolarSystem> locations = service.getLocations();
         Assert.assertFalse(locations.isEmpty());
-        Assert.assertNotNull(service.getLocation(locations.get(0).getId()));
+        Assert.assertNotNull(service.getSolarSystem(locations.get(0).getId()));
     }
 
     @Test
