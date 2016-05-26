@@ -1,14 +1,6 @@
 apply plugin: 'java'
 
 subprojects {
-
     group = 'org.devfleet.crest'
     version = '0.1'
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        jcenter()
-    }   
 }
-
-

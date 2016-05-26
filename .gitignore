@@ -5,3 +5,4 @@ src/main/resources/universeDataDx.db
 .idea/
 api/build/
 retrofit/build/
+local.properties
