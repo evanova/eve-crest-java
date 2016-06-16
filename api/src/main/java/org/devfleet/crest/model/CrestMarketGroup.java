@@ -17,6 +17,14 @@ public class CrestMarketGroup extends CrestItem {
         return parentGroup != null;
     }
 
+    public long getParentId() {
+        if (hasParent()) {
+            return parentGroup.getId();
+        }
+
+        return 0;
+    }
+
     public String getParentRef() {
         if (hasParent()) {
             return parentGroup.getHref();
