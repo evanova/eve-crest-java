@@ -15,6 +15,9 @@ public class CrestMarketHistory extends CrestEntity {
     private double averagePrice;
 
     @JsonProperty
+    private int orderCount;
+
+    @JsonProperty
     private long volume;
 
     @JsonProperty
@@ -47,6 +50,14 @@ public class CrestMarketHistory extends CrestEntity {
 
     public long getVolume() {
         return volume;
+    }
+
+    public int getOrderCount() {
+        return this.orderCount;
+    }
+
+    public void setOrderCount(int orderCount) {
+        this.orderCount = orderCount;
     }
 
     public void setVolume(long volume) {
