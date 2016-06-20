@@ -3,6 +3,7 @@ package org.devfleet.crest.retrofit;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devfleet.crest.model.CrestCharacter;
@@ -12,12 +13,18 @@ import org.devfleet.crest.model.CrestDictionary;
 import org.devfleet.crest.model.CrestFitting;
 import org.devfleet.crest.model.CrestItem;
 import org.devfleet.crest.model.CrestLocation;
+import org.devfleet.crest.model.CrestMarketBulkOrder;
 import org.devfleet.crest.model.CrestMarketHistory;
+import org.devfleet.crest.model.CrestMarketOrder;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
 import org.devfleet.crest.model.CrestWaypoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 final class CrestServiceImpl extends AbstractCrestService {
 
@@ -264,6 +271,64 @@ final class CrestServiceImpl extends AbstractCrestService {
             return returned;
         }
         catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
+        }
+    }
+
+    @Override
+    public List<CrestMarketOrder> getMarketOrders(final long regionId, final String orderType, final long itemId) {
+        try {
+            CrestDictionary<CrestMarketOrder> dictionary;
+
+            // TODO: Change this so that it pulls the url from the root CREST
+            // endpoint
+            final String typePath = href("inventory/types") + itemId + "/";
+
+            dictionary = this.publicCrest().getMarketOrders(regionId, orderType, typePath).execute().body();
+
+            return dictionary.getItems();
+        } catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
+        }
+    }
+
+    @Override
+    public List<CrestMarketBulkOrder> getAllOrders(final long regionId) {
+        try {
+            final List<CrestMarketBulkOrder> returned = new ArrayList<>();
+            CrestDictionary<CrestMarketBulkOrder> dictionary;
+            int page = 0;
+            do {
+                page = page + 1;
+                dictionary = this.publicCrest().getAllMarketOrders(regionId, page).execute().body();
+                if (null == dictionary) {
+                    LOG.error("getAllOrders: null dictionnary {}, {}", regionId);
+                    break;
+                }
+                returned.addAll(dictionary.getItems());
+            } while (dictionary.getPageCount() > page);
+            return returned;
+        } catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
+        }
+    }
+
+    @Override
+    public void getAllOrdersAsync(final long regionId, final Callback<CrestDictionary<CrestMarketBulkOrder>> cb) {
+        try {
+            final Call<CrestDictionary<CrestMarketBulkOrder>> call = this.publicCrest().getAllMarketOrders(regionId, 1);
+            final Response<CrestDictionary<CrestMarketBulkOrder>> response = call.execute();
+            final CrestDictionary<CrestMarketBulkOrder> dictionary = response.body();
+
+            cb.onResponse(call, response);
+
+            for (int idx = 2; idx < dictionary.getPageCount() + 1; idx++) {
+                this.publicCrest().getAllMarketOrders(regionId, idx).enqueue(cb);
+            }
+        } catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
             throw new IllegalStateException(e.getLocalizedMessage(), e);
         }

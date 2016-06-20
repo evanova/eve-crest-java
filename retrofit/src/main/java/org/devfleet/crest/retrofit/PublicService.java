@@ -1,7 +1,9 @@
 package org.devfleet.crest.retrofit;
 
 import org.devfleet.crest.model.CrestDictionary;
+import org.devfleet.crest.model.CrestMarketBulkOrder;
 import org.devfleet.crest.model.CrestMarketHistory;
+import org.devfleet.crest.model.CrestMarketOrder;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
 
@@ -28,5 +30,14 @@ interface PublicService {
             @Query("page") final int page);
 
     //https://public-crest.eveonline.com/market/10000002/orders/buy/?type=http://public-crest.eveonline.com/types/32772/
+    @GET("/market/{regionId}/orders/{orderType}/")
+    Call<CrestDictionary<CrestMarketOrder>> getMarketOrders (
+            @Path("regionId") final long regionId,
+            @Path("orderType") final String orderType,
+            @Query("type") final String typePath);
 
+    @GET("/market/{regionId}/orders/all/")
+    Call<CrestDictionary<CrestMarketBulkOrder>> getAllMarketOrders (
+            @Path("regionId") final long regionId,
+            @Query("page") final int page);
 }

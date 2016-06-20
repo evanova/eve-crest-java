@@ -1,14 +1,20 @@
 package org.devfleet.crest;
 
 import java.util.List;
+
 import org.devfleet.crest.model.CrestCharacter;
 import org.devfleet.crest.model.CrestContact;
+import org.devfleet.crest.model.CrestDictionary;
+import org.devfleet.crest.model.CrestFitting;
 import org.devfleet.crest.model.CrestLocation;
+import org.devfleet.crest.model.CrestMarketBulkOrder;
 import org.devfleet.crest.model.CrestMarketHistory;
+import org.devfleet.crest.model.CrestMarketOrder;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
-import org.devfleet.crest.model.CrestFitting;
 import org.devfleet.crest.model.CrestWaypoint;
+
+import retrofit2.Callback;
 
 public interface CrestService {
 
@@ -42,4 +48,10 @@ public interface CrestService {
 
     List<CrestMarketHistory> getMarketHistory(final long regionId, final long itemId);
 
+    List<CrestMarketOrder> getMarketOrders(final long regionId, final String orderType, final long itemId);
+
+    List<CrestMarketBulkOrder> getAllOrders(final long regionId );
+
+    //TODO: Take some time and design a callback that doesn't make retrofit a dependency up here.
+    void getAllOrdersAsync(final long regionId, final Callback<CrestDictionary<CrestMarketBulkOrder>> cb);
 }
