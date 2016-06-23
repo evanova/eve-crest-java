@@ -22,10 +22,6 @@ import org.devfleet.crest.model.CrestWaypoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 final class CrestServiceImpl extends AbstractCrestService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CrestServiceImpl.class);
@@ -310,24 +306,6 @@ final class CrestServiceImpl extends AbstractCrestService {
                 returned.addAll(dictionary.getItems());
             } while (dictionary.getPageCount() > page);
             return returned;
-        } catch (IOException e) {
-            LOG.error(e.getLocalizedMessage(), e);
-            throw new IllegalStateException(e.getLocalizedMessage(), e);
-        }
-    }
-
-    @Override
-    public void getAllOrdersAsync(final long regionId, final Callback<CrestDictionary<CrestMarketBulkOrder>> cb) {
-        try {
-            final Call<CrestDictionary<CrestMarketBulkOrder>> call = this.publicCrest().getAllMarketOrders(regionId, 1);
-            final Response<CrestDictionary<CrestMarketBulkOrder>> response = call.execute();
-            final CrestDictionary<CrestMarketBulkOrder> dictionary = response.body();
-
-            cb.onResponse(call, response);
-
-            for (int idx = 2; idx < dictionary.getPageCount() + 1; idx++) {
-                this.publicCrest().getAllMarketOrders(regionId, idx).enqueue(cb);
-            }
         } catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
             throw new IllegalStateException(e.getLocalizedMessage(), e);

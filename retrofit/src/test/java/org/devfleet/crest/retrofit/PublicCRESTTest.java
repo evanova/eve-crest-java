@@ -62,31 +62,4 @@ public final class PublicCRESTTest {
         final List<CrestMarketBulkOrder> bo = service.getAllOrders(10000002);
         Assert.assertFalse(bo.isEmpty());
     }
-
-    @Test
-    @Ignore
-    public void testGetAllOrdersAsync ( ) throws InterruptedException {
-        final List<CrestMarketBulkOrder> bo = Collections.synchronizedList(new ArrayList<CrestMarketBulkOrder>());
-        Callback<CrestDictionary<CrestMarketBulkOrder>> cb = new Callback<CrestDictionary<CrestMarketBulkOrder>>() {
-            @Override
-            public void onResponse(Call<CrestDictionary<CrestMarketBulkOrder>> call,
-                    Response<CrestDictionary<CrestMarketBulkOrder>> response)
-            {
-                CrestDictionary<CrestMarketBulkOrder> body = response.body();
-                bo.addAll(body.getItems());
-            }
-
-            @Override
-            public void onFailure(Call<CrestDictionary<CrestMarketBulkOrder>> call, Throwable t) {
-                LOG.error("onFailure called");
-            }
-        };
-
-        service.getAllOrdersAsync(10000002, cb);
-
-        //Give some time for the executor to call the callbacks as many times as it needs (this shouldn't take 30 seconds
-        //unless you're on a crappy connection
-        Thread.sleep(30000);
-        Assert.assertFalse(bo.isEmpty());
-    }
 }
