@@ -59,7 +59,7 @@ public final class PublicCRESTTest {
     @Test
     @Ignore
     public void testGetAllMarketOrders ( ) {
-        final List<CrestMarketBulkOrder> bo = service.getAllOrders(10000002);
+        final List<CrestMarketBulkOrder> bo = service.getAllMarketOrders(10000002);
         Assert.assertFalse(bo.isEmpty());
     }
 }

@@ -47,5 +47,5 @@ public interface CrestService {
 
     List<CrestMarketOrder> getMarketOrders(final long regionId, final String orderType, final long itemId);
 
-    List<CrestMarketBulkOrder> getAllOrders(final long regionId );
+    List<CrestMarketBulkOrder> getAllMarketOrders(final long regionId );
 }

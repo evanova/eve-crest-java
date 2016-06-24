@@ -291,7 +291,7 @@ final class CrestServiceImpl extends AbstractCrestService {
     }
 
     @Override
-    public List<CrestMarketBulkOrder> getAllOrders(final long regionId) {
+    public List<CrestMarketBulkOrder> getAllMarketOrders(final long regionId) {
         try {
             final List<CrestMarketBulkOrder> returned = new ArrayList<>();
             CrestDictionary<CrestMarketBulkOrder> dictionary;
