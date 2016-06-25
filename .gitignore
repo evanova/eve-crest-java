@@ -6,3 +6,6 @@ src/main/resources/universeDataDx.db
 api/build/
 retrofit/build/
 local.properties
+.classpath
+.project
+.settings
