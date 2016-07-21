@@ -24,11 +24,10 @@ interface PublicService {
     @GET("/")
     Call<CrestServerStatus> getServerStatus();
 
-    @GET("/market/{regionId}/types/{itemId}/history/")
+    @GET("/market/{regionId}/history/")
     Call<CrestDictionary<CrestMarketHistory>> getMarketHistory(
             @Path("regionId") final long regionId,
-            @Path("itemId") final long itemId,
-            @Query("page") final int page);
+            @Query("type") final String typePath);
 
     //https://public-crest.eveonline.com/market/10000002/orders/buy/?type=http://public-crest.eveonline.com/types/32772/
     @GET("/market/{regionId}/orders/{orderType}/")

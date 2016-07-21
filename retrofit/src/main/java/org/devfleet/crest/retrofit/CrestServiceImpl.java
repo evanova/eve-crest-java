@@ -254,17 +254,13 @@ final class CrestServiceImpl extends AbstractCrestService {
         try {
             final List<CrestMarketHistory> returned = new ArrayList<>();
             CrestDictionary<CrestMarketHistory> dictionary;
-            int page = 0;
-            do {
-                page = page + 1;
-                dictionary = this.publicCrest().getMarketHistory(regionId, itemId, page).execute().body();
-                if (null == dictionary) {
-                    LOG.error("getMarketHistory: null dictionary {}, {}", regionId, itemId);
-                    break;
-                }
-                returned.addAll(dictionary.getItems());
+            
+            final String typePath = href("inventory/types") + itemId + "/";
+            dictionary = this.publicCrest().getMarketHistory(regionId, typePath).execute().body();
+            if (null == dictionary) {
+                LOG.error("getMarketHistory: null dictionary {}, {}", regionId, itemId);
             }
-            while (dictionary.getPageCount() > page);
+            returned.addAll(dictionary.getItems());
             return returned;
         }
         catch (IOException e) {
