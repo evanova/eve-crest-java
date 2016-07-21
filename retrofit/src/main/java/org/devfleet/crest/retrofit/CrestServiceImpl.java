@@ -311,24 +311,24 @@ final class CrestServiceImpl extends AbstractCrestService {
     
     @Override
     public List<CrestMarketPrice> getAllMarketPrices() {
-    	try {
-    		final List<CrestMarketPrice> returned = new ArrayList<>();
-    		
-    		CrestDictionary<CrestMarketPrice> dictionary;
-    		int page = 0;
-    		do {
-    			page = page + 1;
-    			dictionary = this.publicCrest().getAllMarketPrices(page).execute().body();
-    			if (null == dictionary) {
-    				LOG.error("getAllMarketPrices: null dictionary {}", page);
-    			}
-    			returned.addAll(dictionary.getItems());
-    		} while (dictionary.getPageCount() > page);
-    		return returned;
-    	}
-    	catch (IOException e) {
-    		LOG.error(e.getLocalizedMessage());
-    		throw new IllegalStateException(e.getLocalizedMessage(), e);
+         try {
+            final List<CrestMarketPrice> returned = new ArrayList<>();
+
+            CrestDictionary<CrestMarketPrice> dictionary;
+            int page = 0;
+            do {
+                page = page + 1;
+                dictionary = this.publicCrest().getAllMarketPrices(page).execute().body();
+                if (null == dictionary) {
+                    LOG.error("getAllMarketPrices: null dictionary {}", page);
+                }
+                returned.addAll(dictionary.getItems());
+            } while (dictionary.getPageCount() > page);
+            return returned;
+        }
+        catch (IOException e) {
+            LOG.error(e.getLocalizedMessage());
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
     	}
     }
 

@@ -43,11 +43,11 @@ public final class PublicCRESTTest {
     }
     
     @Test
-  @Ignore
-  public void testGetJita150mmRailIIMarketHistory() {
-      final List<CrestMarketHistory> h = service.getMarketHistory(10000002, 23713);
-      Assert.assertFalse(h.isEmpty());
-  }
+    @Ignore
+    public void testGetJita150mmRailIIMarketHistory() {
+        final List<CrestMarketHistory> h = service.getMarketHistory(10000002, 23713);
+        Assert.assertFalse(h.isEmpty());
+    }
 
     @Test
     @Ignore
@@ -63,11 +63,11 @@ public final class PublicCRESTTest {
         final List<CrestMarketBulkOrder> bo = service.getAllMarketOrders(10000002);
         Assert.assertFalse(bo.isEmpty());
     }
-    
+
     @Test
-//    @Ignore
+    @Ignore
     public void testGetAllMarketPrices ( ) {
-    	final List<CrestMarketPrice> prices = service.getAllMarketPrices();
-    	Assert.assertFalse(prices.isEmpty());
+        final List<CrestMarketPrice> prices = service.getAllMarketPrices();
+        Assert.assertFalse(prices.isEmpty());
     }
 }
