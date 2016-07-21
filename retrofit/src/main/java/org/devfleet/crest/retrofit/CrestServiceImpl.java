@@ -16,6 +16,7 @@ import org.devfleet.crest.model.CrestLocation;
 import org.devfleet.crest.model.CrestMarketBulkOrder;
 import org.devfleet.crest.model.CrestMarketHistory;
 import org.devfleet.crest.model.CrestMarketOrder;
+import org.devfleet.crest.model.CrestMarketPrice;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
 import org.devfleet.crest.model.CrestWaypoint;
@@ -258,7 +259,7 @@ final class CrestServiceImpl extends AbstractCrestService {
                 page = page + 1;
                 dictionary = this.publicCrest().getMarketHistory(regionId, itemId, page).execute().body();
                 if (null == dictionary) {
-                    LOG.error("getMarketHistory: null dictionnary {}, {}", regionId, itemId);
+                    LOG.error("getMarketHistory: null dictionary {}, {}", regionId, itemId);
                     break;
                 }
                 returned.addAll(dictionary.getItems());
@@ -300,7 +301,7 @@ final class CrestServiceImpl extends AbstractCrestService {
                 page = page + 1;
                 dictionary = this.publicCrest().getAllMarketOrders(regionId, page).execute().body();
                 if (null == dictionary) {
-                    LOG.error("getAllOrders: null dictionnary {}, {}", regionId);
+                    LOG.error("getAllMarketOrders: null dictionary {}", regionId);
                     break;
                 }
                 returned.addAll(dictionary.getItems());
@@ -310,6 +311,29 @@ final class CrestServiceImpl extends AbstractCrestService {
             LOG.error(e.getLocalizedMessage(), e);
             throw new IllegalStateException(e.getLocalizedMessage(), e);
         }
+    }
+    
+    @Override
+    public List<CrestMarketPrice> getAllMarketPrices() {
+    	try {
+    		final List<CrestMarketPrice> returned = new ArrayList<>();
+    		
+    		CrestDictionary<CrestMarketPrice> dictionary;
+    		int page = 0;
+    		do {
+    			page = page + 1;
+    			dictionary = this.publicCrest().getAllMarketPrices(page).execute().body();
+    			if (null == dictionary) {
+    				LOG.error("getAllMarketPrices: null dictionary {}", page);
+    			}
+    			returned.addAll(dictionary.getItems());
+    		} while (dictionary.getPageCount() > page);
+    		return returned;
+    	}
+    	catch (IOException e) {
+    		LOG.error(e.getLocalizedMessage());
+    		throw new IllegalStateException(e.getLocalizedMessage(), e);
+    	}
     }
 
     private String href(String path) {

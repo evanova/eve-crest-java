@@ -4,6 +4,7 @@ import org.devfleet.crest.model.CrestDictionary;
 import org.devfleet.crest.model.CrestMarketBulkOrder;
 import org.devfleet.crest.model.CrestMarketHistory;
 import org.devfleet.crest.model.CrestMarketOrder;
+import org.devfleet.crest.model.CrestMarketPrice;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
 
@@ -40,4 +41,7 @@ interface PublicService {
     Call<CrestDictionary<CrestMarketBulkOrder>> getAllMarketOrders (
             @Path("regionId") final long regionId,
             @Query("page") final int page);
+    
+    @GET("/market/prices/")
+    Call<CrestDictionary<CrestMarketPrice>> getAllMarketPrices (@Query("page") final int page);
 }

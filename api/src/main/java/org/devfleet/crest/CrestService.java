@@ -9,6 +9,7 @@ import org.devfleet.crest.model.CrestLocation;
 import org.devfleet.crest.model.CrestMarketBulkOrder;
 import org.devfleet.crest.model.CrestMarketHistory;
 import org.devfleet.crest.model.CrestMarketOrder;
+import org.devfleet.crest.model.CrestMarketPrice;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
 import org.devfleet.crest.model.CrestWaypoint;
@@ -48,4 +49,6 @@ public interface CrestService {
     List<CrestMarketOrder> getMarketOrders(final long regionId, final String orderType, final long itemId);
 
     List<CrestMarketBulkOrder> getAllMarketOrders(final long regionId );
+    
+    List<CrestMarketPrice> getAllMarketPrices();
 }

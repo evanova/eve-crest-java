@@ -1,14 +1,12 @@
 package org.devfleet.crest.retrofit;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.devfleet.crest.CrestService;
-import org.devfleet.crest.model.CrestDictionary;
 import org.devfleet.crest.model.CrestMarketBulkOrder;
 import org.devfleet.crest.model.CrestMarketHistory;
 import org.devfleet.crest.model.CrestMarketOrder;
+import org.devfleet.crest.model.CrestMarketPrice;
 import org.devfleet.crest.model.CrestSolarSystem;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -16,10 +14,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public final class PublicCRESTTest {
 
@@ -61,5 +55,12 @@ public final class PublicCRESTTest {
     public void testGetAllMarketOrders ( ) {
         final List<CrestMarketBulkOrder> bo = service.getAllMarketOrders(10000002);
         Assert.assertFalse(bo.isEmpty());
+    }
+    
+    @Test
+    @Ignore
+    public void testGetAllMarketPrices ( ) {
+    	final List<CrestMarketPrice> prices = service.getAllMarketPrices();
+    	Assert.assertFalse(prices.isEmpty());
     }
 }
