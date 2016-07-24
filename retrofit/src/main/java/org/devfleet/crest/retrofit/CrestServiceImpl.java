@@ -19,6 +19,7 @@ import org.devfleet.crest.model.CrestMarketOrder;
 import org.devfleet.crest.model.CrestMarketPrice;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
+import org.devfleet.crest.model.CrestType;
 import org.devfleet.crest.model.CrestWaypoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,17 @@ final class CrestServiceImpl extends AbstractCrestService {
     public CrestSolarSystem getSolarSystem(long solarSystemId) {
         try {
             return this.publicCrest().getSolarSystem(solarSystemId).execute().body();
+        }
+        catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
+        }
+    }
+
+    @Override
+    public CrestType getInventoryType (int typeId) {
+        try {
+            return this.publicCrest().getInventoryType(typeId).execute().body();
         }
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);

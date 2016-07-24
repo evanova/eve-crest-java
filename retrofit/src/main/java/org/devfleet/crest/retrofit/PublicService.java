@@ -7,6 +7,7 @@ import org.devfleet.crest.model.CrestMarketOrder;
 import org.devfleet.crest.model.CrestMarketPrice;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
+import org.devfleet.crest.model.CrestType;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -23,6 +24,9 @@ interface PublicService {
 
     @GET("/")
     Call<CrestServerStatus> getServerStatus();
+
+    @GET("/inventory/types/{typeId}/")
+    Call<CrestType> getInventoryType (@Path("typeId") final int typeId);
 
     @GET("/market/{regionId}/history/")
     Call<CrestDictionary<CrestMarketHistory>> getMarketHistory(

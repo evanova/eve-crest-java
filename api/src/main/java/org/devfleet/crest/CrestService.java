@@ -12,6 +12,7 @@ import org.devfleet.crest.model.CrestMarketOrder;
 import org.devfleet.crest.model.CrestMarketPrice;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
+import org.devfleet.crest.model.CrestType;
 import org.devfleet.crest.model.CrestWaypoint;
 
 public interface CrestService {
@@ -23,6 +24,8 @@ public interface CrestService {
     CrestLocation getLocation();
 
     CrestSolarSystem getSolarSystem(long solarSystemId);
+
+    CrestType getInventoryType (int typeId);
 
     List<CrestSolarSystem> getLocations();
 

@@ -8,6 +8,7 @@ import org.devfleet.crest.model.CrestMarketHistory;
 import org.devfleet.crest.model.CrestMarketOrder;
 import org.devfleet.crest.model.CrestMarketPrice;
 import org.devfleet.crest.model.CrestSolarSystem;
+import org.devfleet.crest.model.CrestType;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -69,5 +70,13 @@ public final class PublicCRESTTest {
     public void testGetAllMarketPrices ( ) {
         final List<CrestMarketPrice> prices = service.getAllMarketPrices();
         Assert.assertFalse(prices.isEmpty());
+    }
+
+    @Test
+    @Ignore
+    public void testGet150mmLightAutoCannonInventoryType ( ) {
+        final CrestType type = service.getInventoryType(485);
+        Assert.assertNotNull(type);
+        Assert.assertEquals(type.getName(), "150mm Light AutoCannon I");
     }
 }
