@@ -3,12 +3,7 @@ package org.devfleet.crest.retrofit;
 import java.util.List;
 
 import org.devfleet.crest.CrestService;
-import org.devfleet.crest.model.CrestMarketBulkOrder;
-import org.devfleet.crest.model.CrestMarketHistory;
-import org.devfleet.crest.model.CrestMarketOrder;
-import org.devfleet.crest.model.CrestMarketPrice;
-import org.devfleet.crest.model.CrestSolarSystem;
-import org.devfleet.crest.model.CrestType;
+import org.devfleet.crest.model.*;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -78,5 +73,13 @@ public final class PublicCRESTTest {
         final CrestType type = service.getInventoryType(485);
         Assert.assertNotNull(type);
         Assert.assertEquals(type.getName(), "150mm Light AutoCannon I");
+    }
+
+    @Test
+    @Ignore
+    public void testGetRegions ( ) {
+        final List<CrestItem> regions = service.getRegions();
+        Assert.assertNotNull(regions);
+        Assert.assertEquals(regions.size(), 100);
     }
 }

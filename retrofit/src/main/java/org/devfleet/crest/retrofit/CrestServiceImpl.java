@@ -83,6 +83,28 @@ final class CrestServiceImpl extends AbstractCrestService {
     }
 
     @Override
+    public List<CrestItem> getRegions ( ) {
+        try {
+            final List<CrestItem> returned = new ArrayList<>();
+            CrestDictionary<CrestItem> dictionary;
+            int page = 0;
+            do {
+                page = page + 1;
+                dictionary = this.publicCrest().getRegions().execute().body();
+                if (null == dictionary) {
+                    LOG.error("getRegions: null dictionary");
+                    break;
+                }
+                returned.addAll(dictionary.getItems());
+            } while (dictionary.getPageCount() > page);
+            return returned;
+        } catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
+        }
+    }
+
+    @Override
     public CrestCharacter getCharacter() {
         final CrestCharacterStatus status = getCharacterStatus();
         try {

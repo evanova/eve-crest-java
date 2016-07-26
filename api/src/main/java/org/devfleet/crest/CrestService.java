@@ -2,18 +2,7 @@ package org.devfleet.crest;
 
 import java.util.List;
 
-import org.devfleet.crest.model.CrestCharacter;
-import org.devfleet.crest.model.CrestContact;
-import org.devfleet.crest.model.CrestFitting;
-import org.devfleet.crest.model.CrestLocation;
-import org.devfleet.crest.model.CrestMarketBulkOrder;
-import org.devfleet.crest.model.CrestMarketHistory;
-import org.devfleet.crest.model.CrestMarketOrder;
-import org.devfleet.crest.model.CrestMarketPrice;
-import org.devfleet.crest.model.CrestServerStatus;
-import org.devfleet.crest.model.CrestSolarSystem;
-import org.devfleet.crest.model.CrestType;
-import org.devfleet.crest.model.CrestWaypoint;
+import org.devfleet.crest.model.*;
 
 public interface CrestService {
 
@@ -28,6 +17,8 @@ public interface CrestService {
     CrestType getInventoryType (int typeId);
 
     List<CrestSolarSystem> getLocations();
+
+    List<CrestItem> getRegions();
 
     List<CrestContact> getContacts();
 

@@ -1,13 +1,6 @@
 package org.devfleet.crest.retrofit;
 
-import org.devfleet.crest.model.CrestDictionary;
-import org.devfleet.crest.model.CrestMarketBulkOrder;
-import org.devfleet.crest.model.CrestMarketHistory;
-import org.devfleet.crest.model.CrestMarketOrder;
-import org.devfleet.crest.model.CrestMarketPrice;
-import org.devfleet.crest.model.CrestServerStatus;
-import org.devfleet.crest.model.CrestSolarSystem;
-import org.devfleet.crest.model.CrestType;
+import org.devfleet.crest.model.*;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -21,6 +14,9 @@ interface PublicService {
 
     @GET("/solarsystems/")
     Call<CrestDictionary<CrestSolarSystem>> getSolarSystems();
+
+    @GET("/regions/")
+    Call<CrestDictionary<CrestItem>> getRegions();
 
     @GET("/")
     Call<CrestServerStatus> getServerStatus();
