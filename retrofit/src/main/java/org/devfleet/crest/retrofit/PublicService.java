@@ -1,9 +1,6 @@
 package org.devfleet.crest.retrofit;
 
-import org.devfleet.crest.model.CrestDictionary;
-import org.devfleet.crest.model.CrestMarketHistory;
-import org.devfleet.crest.model.CrestServerStatus;
-import org.devfleet.crest.model.CrestSolarSystem;
+import org.devfleet.crest.model.*;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,15 +15,32 @@ interface PublicService {
     @GET("/solarsystems/")
     Call<CrestDictionary<CrestSolarSystem>> getSolarSystems();
 
+    @GET("/regions/")
+    Call<CrestDictionary<CrestItem>> getRegions();
+
     @GET("/")
     Call<CrestServerStatus> getServerStatus();
 
-    @GET("/market/{regionId}/types/{itemId}/history/")
+    @GET("/inventory/types/{typeId}/")
+    Call<CrestType> getInventoryType (@Path("typeId") final int typeId);
+
+    @GET("/market/{regionId}/history/")
     Call<CrestDictionary<CrestMarketHistory>> getMarketHistory(
             @Path("regionId") final long regionId,
-            @Path("itemId") final long itemId,
-            @Query("page") final int page);
+            @Query("type") final String typePath);
 
     //https://public-crest.eveonline.com/market/10000002/orders/buy/?type=http://public-crest.eveonline.com/types/32772/
+    @GET("/market/{regionId}/orders/{orderType}/")
+    Call<CrestDictionary<CrestMarketOrder>> getMarketOrders (
+            @Path("regionId") final long regionId,
+            @Path("orderType") final String orderType,
+            @Query("type") final String typePath);
 
+    @GET("/market/{regionId}/orders/all/")
+    Call<CrestDictionary<CrestMarketBulkOrder>> getAllMarketOrders (
+            @Path("regionId") final long regionId,
+            @Query("page") final int page);
+    
+    @GET("/market/prices/")
+    Call<CrestDictionary<CrestMarketPrice>> getAllMarketPrices (@Query("page") final int page);
 }

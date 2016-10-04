@@ -2,6 +2,7 @@ package org.devfleet.crest.retrofit;
 
 import java.io.IOException;
 
+
 import org.apache.commons.lang3.StringUtils;
 import org.devfleet.crest.CrestService;
 import org.devfleet.crest.model.CrestCharacterStatus;
@@ -27,10 +28,13 @@ abstract class AbstractCrestService implements CrestService {
             final String clientID,
             final String clientKey) {
 
-        this.loginService =
-                (StringUtils.isNoneBlank(clientID, clientKey)) ?
-                CrestRetrofit.newLogin(loginHost, clientID, clientKey).create(LoginService.class) :
-                null;
+        if (StringUtils.isBlank(clientID) || StringUtils.isBlank(clientKey)) {
+            this.loginService = null;
+        }
+        else {
+            this.loginService = CrestRetrofit.newLogin(loginHost, clientID, clientKey).create(LoginService.class);
+        }
+
         this.publicService = CrestRetrofit.newClient(crestHost).create(PublicService.class);
         this.authService = CrestRetrofit.newClient(crestHost).create(AuthenticatedService.class);
         this.crestHost = crestHost;
@@ -50,7 +54,7 @@ abstract class AbstractCrestService implements CrestService {
 
     public final void setAuthCode(final String authCode) throws IOException {
         if (null == this.loginService) {
-            throw new IOException("setRefreshToken: no login service without a client id/key.");
+            throw new IOException("setAuthCode: no login service without a client id/key.");
         }
         if (StringUtils.isBlank(authCode)) {
             setNewToken(null);
@@ -58,6 +62,10 @@ abstract class AbstractCrestService implements CrestService {
         else {
             setNewToken(obtainFromAuth(this.loginService, authCode));
         }
+    }
+
+    public final void setAccessToken(final CrestToken token) throws IOException {
+        setNewToken(token);
     }
 
     protected final PublicService publicCrest() {
@@ -70,7 +78,7 @@ abstract class AbstractCrestService implements CrestService {
 
     protected CrestCharacterStatus getCharacterStatus() {
         if (null == this.loginService) {
-            throw new IllegalStateException("Not login service");
+            throw new IllegalStateException("No login service");
         }
         if (null == this.token) {
             throw new IllegalStateException("Not authenticated");
@@ -94,7 +102,7 @@ abstract class AbstractCrestService implements CrestService {
             }
             catch (IOException e2) {
                 LOG.error(e2.getLocalizedMessage());
-                return null;
+                throw new IllegalStateException(e.getLocalizedMessage());
             }
         }
     }

@@ -1,38 +1,17 @@
 package org.devfleet.crest.retrofit;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
-import org.devfleet.crest.CrestService;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
+import org.devfleet.crest.CrestAccess;
+import org.devfleet.crest.CrestService;
+import org.devfleet.crest.model.CrestToken;
 
 public final class CrestClient {
-
-    private static final String[] TQ_SCOPES = {
-            "publicData",
-            "characterContactsRead",
-            "characterContactsWrite",
-            "characterFittingsRead",
-            "characterFittingsWrite",
-            "characterNavigationWrite"
-    };
-
-    private static final String[] SISI_SCOPES = {
-            "publicData",
-            "characterContactsRead",
-            "characterContactsWrite",
-            "characterFittingsRead",
-            "characterFittingsWrite",
-            "characterNavigationWrite",
-            "characterOpportunitiesRead",
-            "characterLoyaltyPointsRead",
-            "fleetRead",
-            "fleetWrite"
-    };
 
     private static final String TQ_LOGIN = "login.eveonline.com";
     private static final String TQ_CREST = "crest-tq.eveonline.com";
@@ -52,7 +31,7 @@ public final class CrestClient {
 
         public Builder() {
             this.scopes = new ArrayList<>();
-            this.scopes.add("publicData");
+            this.scopes.addAll(Arrays.asList(CrestAccess.PUBLIC_SCOPES));
         }
 
         public Builder login(final String host) {
@@ -81,8 +60,11 @@ public final class CrestClient {
         }
 
         public Builder scopes(final String... scopes) {
-            this.scopes.clear();
-            this.scopes.addAll(Arrays.asList(scopes));
+            for (String s: scopes) {
+                if (!this.scopes.contains(s)) {
+                    this.scopes.add(s);
+                }
+            }
             return this;
         }
 
@@ -104,6 +86,9 @@ public final class CrestClient {
 
     private final String loginUri;
 
+    private final long characterAccessMask;
+    private final long corporationAccessMask;
+
     private CrestClient(
             final String loginHost,
             final String crestHost,
@@ -119,6 +104,57 @@ public final class CrestClient {
         this.clientID = clientID;
         this.clientKey = clientKey;
 
+        this.loginUri = getLoginUri(
+                    loginHost,
+                    clientID,
+                    clientKey,
+                    clientRedirect,
+                    scopes);
+        this.characterAccessMask = toAccessMask(scopes, CrestAccess.CHARACTER_SCOPES);
+        this.corporationAccessMask = toAccessMask(scopes, CrestAccess.CORPORATION_SCOPES);
+    }
+
+    public static Builder SISI() {
+        return new Builder()
+                .login(SISI_LOGIN)
+                .api(SISI_CREST)
+                .scopes(CrestAccess.CORPORATION_SCOPES)
+                .scopes(CrestAccess.CHARACTER_SCOPES);
+    }
+
+    public static Builder SISI(String... scopes) {
+        return new Builder()
+                .login(SISI_LOGIN)
+                .api(SISI_CREST)
+                .scopes(scopes);
+    }
+
+    public static Builder TQ(String... scopes) {
+        return new Builder()
+                .login(TQ_LOGIN)
+                .api(TQ_CREST)
+                .scopes(scopes);
+    }
+
+    public static Builder TQ() {
+        return new Builder()
+                .login(TQ_LOGIN)
+                .api(TQ_CREST)
+                .scopes(CrestAccess.CORPORATION_SCOPES)
+                .scopes(CrestAccess.CHARACTER_SCOPES);
+    }
+
+    public static String getLoginUri(
+             final String loginHost,
+             final String clientID,
+             final String clientKey,
+             final String clientRedirect,
+             final String[] scopes) {
+
+        if (StringUtils.isBlank(clientID) || StringUtils.isBlank(clientKey) || StringUtils.isBlank(clientRedirect)) {
+            return null;
+        }
+
         StringBuilder builder = new StringBuilder();
         if (ArrayUtils.isEmpty(scopes)) {
             builder.append("publicData");
@@ -129,35 +165,30 @@ public final class CrestClient {
                 builder.append("%20");
             }
         }
-        this.loginUri = (StringUtils.isNoneBlank(clientID, clientKey, clientRedirect)) ?
-                new StringBuilder()
-                .append("https://")
-                .append(this.loginHost)
-                .append("/oauth/authorize/?response_type=code&redirect_uri=")
-                .append(clientRedirect)
-                .append("&client_id=")
-                .append(this.clientID)
-                .append("&scope=")
-                .append(StringUtils.removeEnd(builder.toString(), "%20"))
-                .toString() : null;
-    }
 
-    public static Builder SISI() {
-        return new Builder()
-                .login(SISI_LOGIN)
-                .api(SISI_CREST)
-                .scopes(SISI_SCOPES);
-    }
-
-    public static Builder TQ() {
-        return new Builder()
-                .login(TQ_LOGIN)
-                .api(TQ_CREST)
-                .scopes();
+        return
+            new StringBuilder()
+            .append("https://")
+            .append(loginHost)
+            .append("/oauth/authorize/?response_type=code&redirect_uri=")
+            .append(clientRedirect)
+            .append("&client_id=")
+            .append(clientID)
+            .append("&scope=")
+            .append(StringUtils.removeEnd(builder.toString(), "%20"))
+            .toString();
     }
 
     public String getLoginUri() {
         return this.loginUri;
+    }
+
+    public long getCharacterAccessMask() {
+        return characterAccessMask;
+    }
+
+    public long getCorporationAccessMask() {
+        return corporationAccessMask;
     }
 
     public CrestService fromDefault() throws IOException {
@@ -168,6 +199,12 @@ public final class CrestClient {
     public CrestService fromRefreshToken(final String token) throws IOException {
         final CrestServiceImpl service = newService();
         service.setRefreshToken(token);
+        return service;
+    }
+
+    public CrestService fromAccessToken(final CrestToken token) throws IOException {
+        final CrestServiceImpl service = newService();
+        service.setAccessToken(token);
         return service;
     }
 
@@ -185,4 +222,16 @@ public final class CrestClient {
                 this.clientKey);
     }
 
+    private static long toAccessMask(final String[] scopes, final String[] ref) {
+        long mask = 0;
+        for (String scope: scopes) {
+            if (ArrayUtils.contains(ref, scope)) {
+                Long value = CrestAccess.MASKS.get(scope);
+                if (null != value) {
+                    mask = mask | value;
+                }
+            }
+        }
+        return mask;
+    }
 }

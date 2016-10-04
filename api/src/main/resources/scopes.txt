@@ -1,0 +1,77 @@
+
+characterWalletRead maps to 1 | 2097152 | 4194304.
+characterAssetsRead maps to 2 | 134217728.
+characterCalendarRead maps to 4 | 1048576.
+characterContactsRead maps to 16 | 32 | 524288.
+characterFactionalWarfareRead maps to 64.
+characterIndustryJobsRead maps to 128.
+characterKillsRead maps to 256.
+characterMailRead maps to 512 | 1024 | 2048.
+characterMarketOrdersRead maps to 4096.
+characterMedalsRead maps to 8192.
+characterNotificationsRead maps to 16384 | 32768.
+characterResearchRead maps to 65536.
+characterSkillsRead maps to 131072 | 262144 | 1073741824.
+characterAccountRead maps to 33554432.
+characterContractsRead maps to 67108864.
+characterBookmarksRead maps to 268435456.
+characterChatChannelsRead maps to 536870912.
+characterClonesRead maps to 2147483648.
+
+For a corporation access type, the following scopes map to these access masks:
+corporationWalletRead maps to 1 | 8 | 1048576 | 2097152.
+corporationAssetsRead maps to 2 | 32 | 16777216.
+corporationMedalsRead maps to 4 | 8192.
+corporationContactsRead maps to 16 | 262144.
+corporationFactionalWarfareRead maps to 64.
+corporationIndustryJobsRead maps to 128.
+corporationKillsRead maps to 256.
+corporationMembersRead maps to 512 | 1024 | 2048 | 4194304 | 33554432.
+corporationMarketOrdersRead maps to 4096.
+corporationStructuresRead maps to 16384 | 32768 | 131072.
+corporationShareholdersRead maps to 65536.
+corporationContractsRead maps to 8388608.
+corporationBookmarksRead maps to 67108864.
+
+characterAccountRead: Read your account subscription status.
+characterAssetsRead: Read your asset list.
+characterBookmarksRead: List your bookmarks and their coordinates.
+characterCalendarRead: Read your calendar events and attendees.
+characterChatChannelsRead: List chat channels you own or operate.
+characterClonesRead: List your jump clones, implants, attributes, and jump fatigue timer.
+characterContactsRead: Allows access to reading your characters contacts.
+characterContactsWrite: Allows applications to add, modify, and delete contacts for your character.
+characterContractsRead: Read your contracts.
+characterFactionalWarfareRead: Read your factional warfare statistics.
+characterFittingsRead: Allows an application to view all of your character's saved fits.
+characterFittingsWrite: Allows an application to create and delete the saved fits for your character.
+characterIndustryJobsRead: List your industry jobs.
+characterKillsRead: Read your kill mails.
+characterLocationRead: Allows an application to read your characters real time location in EVE.
+characterLoyaltyPointsRead: List loyalty points your character has for the different corporations.
+characterMailRead: Read your EVE Mail.
+characterMarketOrdersRead: Read your market orders.
+characterMedalsRead: List your public and private medals.
+characterNavigationWrite: Allows an application to set your ships autopilot destination.
+characterNotificationsRead: Receive in-game notifications.
+characterOpportunitiesRead: List the opportunities your character has completed.
+characterResearchRead: List your research agents working for you and research progress.
+characterSkillsRead: Read your skills and skill queue.
+characterStatsRead: Yearly aggregated stats about your character.
+characterWalletRead: Read your wallet status, transaction, and journal history.
+corporationAssetRead: Read your corporation's asset list.
+corporationBookmarksRead: List your corporation's bookmarks and their coordinates.
+corporationContractsRead: List your corporation's contracts.
+corporationFactionalWarfareRead: Read your corporation's factional warfare statistics.
+corporationIndustryJobsRead: List your corporation's industry jobs.
+corporationKillsRead: Read your corporation's kill mails.
+corporationMarketOrdersRead: List your corporation's market orders.
+corporationMedalsRead: List your corporation's issued medals.
+corporationMembersRead: List your corporation's members, their titles, and roles.
+corporationShareholdersRead: List your corporation's shareholders and their shares.
+corporationStructuresRead: List your corporation's structures, outposts, and starbases.
+corporationWalletRead: Read your corporation's wallet status, transaction, and journal history.
+fleetRead: Allows real time reading of your fleet information (members, ship types, etc.) if you're the boss of the fleet.
+fleetWrite: Allows the ability to invite, kick, and update fleet information if you're the boss of the fleet.
+publicData: Allows access to public data.
+structureVulnUpdate: Allows updating your structures' vulnerability timers.

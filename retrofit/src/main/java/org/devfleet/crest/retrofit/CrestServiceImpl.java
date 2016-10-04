@@ -1,5 +1,9 @@
 package org.devfleet.crest.retrofit;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devfleet.crest.model.CrestCharacter;
@@ -9,17 +13,16 @@ import org.devfleet.crest.model.CrestDictionary;
 import org.devfleet.crest.model.CrestFitting;
 import org.devfleet.crest.model.CrestItem;
 import org.devfleet.crest.model.CrestLocation;
+import org.devfleet.crest.model.CrestMarketBulkOrder;
 import org.devfleet.crest.model.CrestMarketHistory;
+import org.devfleet.crest.model.CrestMarketOrder;
+import org.devfleet.crest.model.CrestMarketPrice;
 import org.devfleet.crest.model.CrestServerStatus;
 import org.devfleet.crest.model.CrestSolarSystem;
-
+import org.devfleet.crest.model.CrestType;
 import org.devfleet.crest.model.CrestWaypoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 final class CrestServiceImpl extends AbstractCrestService {
 
@@ -47,9 +50,20 @@ final class CrestServiceImpl extends AbstractCrestService {
     }
 
     @Override
-    public CrestSolarSystem getLocation(long solarSystemId) {
+    public CrestSolarSystem getSolarSystem(long solarSystemId) {
         try {
             return this.publicCrest().getSolarSystem(solarSystemId).execute().body();
+        }
+        catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
+        }
+    }
+
+    @Override
+    public CrestType getInventoryType (int typeId) {
+        try {
+            return this.publicCrest().getInventoryType(typeId).execute().body();
         }
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
@@ -69,11 +83,34 @@ final class CrestServiceImpl extends AbstractCrestService {
     }
 
     @Override
+    public List<CrestItem> getRegions ( ) {
+        try {
+            final List<CrestItem> returned = new ArrayList<>();
+            CrestDictionary<CrestItem> dictionary;
+            int page = 0;
+            do {
+                page = page + 1;
+                dictionary = this.publicCrest().getRegions().execute().body();
+                if (null == dictionary) {
+                    LOG.error("getRegions: null dictionary");
+                    break;
+                }
+                returned.addAll(dictionary.getItems());
+            } while (dictionary.getPageCount() > page);
+            return returned;
+        } catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
+        }
+    }
+
+    @Override
     public CrestCharacter getCharacter() {
         final CrestCharacterStatus status = getCharacterStatus();
         try {
             final CrestCharacter character = this.authenticatedCrest().getCharacter(status.getCharacterID()).execute().body();
             character.setRefreshToken((null == this.getToken()) ? null : this.getToken().getRefreshToken());
+            character.setAccessToken((null == this.getToken()) ? null : this.getToken().getAccessToken());
             return character;
         }
         catch (IOException e) {
@@ -83,14 +120,10 @@ final class CrestServiceImpl extends AbstractCrestService {
     }
 
     @Override
-    public CrestSolarSystem getLocation() {
+    public CrestLocation getLocation() {
         final CrestCharacterStatus status = getCharacterStatus();
         try {
-            final CrestLocation location = this.authenticatedCrest().getLocation(status.getCharacterID()).execute().body();
-            if ((null == location) || (location.getId() == 0)) {
-                return null;
-            }
-            return this.publicCrest().getSolarSystem(location.getId()).execute().body();
+            return this.authenticatedCrest().getLocation(status.getCharacterID()).execute().body();
         }
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
@@ -255,23 +288,82 @@ final class CrestServiceImpl extends AbstractCrestService {
         try {
             final List<CrestMarketHistory> returned = new ArrayList<>();
             CrestDictionary<CrestMarketHistory> dictionary;
-            int page = 0;
-            do {
-                page = page + 1;
-                dictionary = this.publicCrest().getMarketHistory(regionId, itemId, page).execute().body();
-                if (null == dictionary) {
-                    LOG.error("getMarketHistory: null dictionnary {}, {}", regionId, itemId);
-                    break;
-                }
-                returned.addAll(dictionary.getItems());
+            
+            final String typePath = href("inventory/types") + itemId + "/";
+            dictionary = this.publicCrest().getMarketHistory(regionId, typePath).execute().body();
+            if (null == dictionary) {
+                LOG.error("getMarketHistory: null dictionary {}, {}", regionId, itemId);
             }
-            while (dictionary.getPageCount() > page);
+            returned.addAll(dictionary.getItems());
             return returned;
         }
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
             throw new IllegalStateException(e.getLocalizedMessage(), e);
         }
+    }
+
+    @Override
+    public List<CrestMarketOrder> getMarketOrders(final long regionId, final String orderType, final long itemId) {
+        try {
+            CrestDictionary<CrestMarketOrder> dictionary;
+
+            // TODO: Change this so that it pulls the url from the root CREST
+            // endpoint
+            final String typePath = href("inventory/types") + itemId + "/";
+
+            dictionary = this.publicCrest().getMarketOrders(regionId, orderType, typePath).execute().body();
+
+            return dictionary.getItems();
+        } catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
+        }
+    }
+
+    @Override
+    public List<CrestMarketBulkOrder> getAllMarketOrders(final long regionId) {
+        try {
+            final List<CrestMarketBulkOrder> returned = new ArrayList<>();
+            CrestDictionary<CrestMarketBulkOrder> dictionary;
+            int page = 0;
+            do {
+                page = page + 1;
+                dictionary = this.publicCrest().getAllMarketOrders(regionId, page).execute().body();
+                if (null == dictionary) {
+                    LOG.error("getAllMarketOrders: null dictionary {}", regionId);
+                    break;
+                }
+                returned.addAll(dictionary.getItems());
+            } while (dictionary.getPageCount() > page);
+            return returned;
+        } catch (IOException e) {
+            LOG.error(e.getLocalizedMessage(), e);
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
+        }
+    }
+    
+    @Override
+    public List<CrestMarketPrice> getAllMarketPrices() {
+         try {
+            final List<CrestMarketPrice> returned = new ArrayList<>();
+
+            CrestDictionary<CrestMarketPrice> dictionary;
+            int page = 0;
+            do {
+                page = page + 1;
+                dictionary = this.publicCrest().getAllMarketPrices(page).execute().body();
+                if (null == dictionary) {
+                    LOG.error("getAllMarketPrices: null dictionary {}", page);
+                }
+                returned.addAll(dictionary.getItems());
+            } while (dictionary.getPageCount() > page);
+            return returned;
+        }
+        catch (IOException e) {
+            LOG.error(e.getLocalizedMessage());
+            throw new IllegalStateException(e.getLocalizedMessage(), e);
+    	}
     }
 
     private String href(String path) {

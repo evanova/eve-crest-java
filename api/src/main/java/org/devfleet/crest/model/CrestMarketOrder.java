@@ -2,6 +2,7 @@ package org.devfleet.crest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class CrestMarketOrder extends CrestItem {
 
@@ -10,6 +11,7 @@ public class CrestMarketOrder extends CrestItem {
 
     @JsonProperty
     @JsonDeserialize(using = DateTimeDeserializer.class)
+    @JsonSerialize(using = DateTimeSerializer.class)
     private long issued;
 
     @JsonProperty
