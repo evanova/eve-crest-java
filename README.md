@@ -1,21 +1,25 @@
 [![Build Status](https://travis-ci.org/evanova/eve-crest-java.svg?branch=master)](https://travis-ci.org/evanova/eve-crest-java)
 
 ## eve-crest-java
+
 [Eve Online CREST](https://eveonline-third-party-documentation.readthedocs.org/en/latest/crest/index.html) implementation in Java.
 
 
 #### Getting Started
 
-* Clone and build this library
+* Insert Jitpack Dependency in Gradle
 ```
-git clone https://github.com/evanova/eve-crest-java.git
-./gradlew build install -x test
+repositories {
+    maven { url "https://jitpack.io" }
+}
 ```
 
-* Import it in your project
+* Add project to dependencies
 ```
-compile 'org.devfleet.crest:retrofit:0.+'
+compile 'com.github.evanova.eve-crest-java:api:master-SNAPSHOT'
+compile 'com.github.evanova.eve-crest-java:retrofit:master-SNAPSHOT'
 ```
+* If you don't want the latest version of master, Replace `master-SNAPSHOT` with a release version
 
 #### Using the library
 
