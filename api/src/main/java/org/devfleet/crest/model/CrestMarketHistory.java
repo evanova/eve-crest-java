@@ -6,9 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public class CrestMarketHistory extends CrestEntity {
 
     @JsonProperty
-    private int orderCount;
-
-    @JsonProperty
     private double lowPrice;
 
     @JsonProperty
@@ -53,14 +50,6 @@ public class CrestMarketHistory extends CrestEntity {
 
     public long getVolume() {
         return volume;
-    }
-
-    public int getOrderCount() {
-        return this.orderCount;
-    }
-
-    public void setOrderCount(int orderCount) {
-        this.orderCount = orderCount;
     }
 
     public void setVolume(long volume) {
