@@ -52,14 +52,6 @@ public class CrestMarketHistory extends CrestEntity {
         return volume;
     }
 
-    public int getOrderCount() {
-        return this.orderCount;
-    }
-
-    public void setOrderCount(int orderCount) {
-        this.orderCount = orderCount;
-    }
-
     public void setVolume(long volume) {
         this.volume = volume;
     }
@@ -70,5 +62,13 @@ public class CrestMarketHistory extends CrestEntity {
 
     public void setDate(long date) {
         this.date = date;
+    }
+
+    public int getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(int orderCount) {
+        this.orderCount = orderCount;
     }
 }
