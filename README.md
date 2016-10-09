@@ -16,8 +16,7 @@ repositories {
 
 * Add project to dependencies
 ```
-compile 'com.github.evanova.eve-crest-java:api:master-SNAPSHOT'
-compile 'com.github.evanova.eve-crest-java:retrofit:master-SNAPSHOT'
+compile 'com.github.evanova:eve-crest-java:master-SNAPSHOT'
 ```
 * If you don't want the latest version of master, Replace `master-SNAPSHOT` with a release version
 
