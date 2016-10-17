@@ -28,7 +28,7 @@ public final class CrestContact extends CrestEntity {
         return standing;
     }
 
-    public void setStanding(int standing) {
+    public void setStanding(double standing) {
         this.standing = standing;
     }
 
