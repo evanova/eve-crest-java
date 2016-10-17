@@ -2,7 +2,7 @@ package org.devfleet.crest.model;
 
 public final class CrestContact extends CrestEntity {
 
-    private int standing;
+    private double standing;
 
     private CrestCharacter character;
 
@@ -24,7 +24,7 @@ public final class CrestContact extends CrestEntity {
         this.href = href;
     }
 
-    public int getStanding() {
+    public double getStanding() {
         return standing;
     }
 
