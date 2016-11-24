@@ -8,6 +8,8 @@ public interface CrestService {
 
     CrestServerStatus getServerStatus();
 
+    CrestCharacterStatus getCharacterStatus();
+
     CrestCharacter getCharacter();
 
     CrestLocation getLocation();

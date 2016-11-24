@@ -7,9 +7,16 @@ import org.devfleet.crest.model.CrestFitting;
 import org.devfleet.crest.model.CrestFleet;
 import org.devfleet.crest.model.CrestFleetSquad;
 import org.devfleet.crest.model.CrestFleetWing;
+import org.devfleet.crest.model.CrestItem;
 import org.devfleet.crest.model.CrestLocation;
+import org.devfleet.crest.model.CrestMarketBulkOrder;
+import org.devfleet.crest.model.CrestMarketHistory;
+import org.devfleet.crest.model.CrestMarketOrder;
+import org.devfleet.crest.model.CrestMarketPrice;
+import org.devfleet.crest.model.CrestServerStatus;
+import org.devfleet.crest.model.CrestSolarSystem;
+import org.devfleet.crest.model.CrestType;
 import org.devfleet.crest.model.CrestWaypoint;
-
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -19,7 +26,42 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-interface AuthenticatedService {
+public interface CrestRetrofitService {
+
+    @GET("/solarsystems/{solarSystemId}/")
+    Call<CrestSolarSystem> getSolarSystem(@Path("solarSystemId") long solarSystemId);
+
+    @GET("/solarsystems/")
+    Call<CrestDictionary<CrestSolarSystem>> getSolarSystems();
+
+    @GET("/regions/")
+    Call<CrestDictionary<CrestItem>> getRegions();
+
+    @GET("/")
+    Call<CrestServerStatus> getServerStatus();
+
+    @GET("/inventory/types/{typeId}/")
+    Call<CrestType> getInventoryType (@Path("typeId") final int typeId);
+
+    @GET("/market/{regionId}/history/")
+    Call<CrestDictionary<CrestMarketHistory>> getMarketHistory(
+            @Path("regionId") final long regionId,
+            @Query("type") final String typePath);
+
+    //https://public-crest.eveonline.com/market/10000002/orders/buy/?type=http://public-crest.eveonline.com/types/32772/
+    @GET("/market/{regionId}/orders/{orderType}/")
+    Call<CrestDictionary<CrestMarketOrder>> getMarketOrders (
+            @Path("regionId") final long regionId,
+            @Path("orderType") final String orderType,
+            @Query("type") final String typePath);
+
+    @GET("/market/{regionId}/orders/all/")
+    Call<CrestDictionary<CrestMarketBulkOrder>> getAllMarketOrders (
+            @Path("regionId") final long regionId,
+            @Query("page") final int page);
+
+    @GET("/market/prices/")
+    Call<CrestDictionary<CrestMarketPrice>> getAllMarketPrices (@Query("page") final int page);
 
     @GET("/characters/{characterId}/")
     Call<CrestCharacter> getCharacter(

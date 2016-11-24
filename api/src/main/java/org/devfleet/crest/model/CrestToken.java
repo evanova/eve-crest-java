@@ -11,10 +11,13 @@ public final class CrestToken extends CrestEntity {
     private String tokenType;
 
     //@JsonProperty("expires_in")
-   // private long expiresIn; //just don't use this
+   private long expiresIn;
 
     @JsonProperty("refresh_token")
     private String refreshToken;
+
+    @JsonProperty
+    private String scope;
 
     private final long created = System.currentTimeMillis();
 
@@ -22,20 +25,48 @@ public final class CrestToken extends CrestEntity {
         return accessToken;
     }
 
+	public CrestToken setAccessToken(final String token) {
+		this.accessToken = token;
+        return this;
+	}
+
     public String getTokenType() {
         return tokenType;
     }
 
-    /*public long getExpiresIn() {
+	public CrestToken setTokenType(String tokenType) {
+		this.tokenType = tokenType;
+        return this;
+	}
+
+    public String getScope() {
+        return scope;
+    }
+
+    public CrestToken setScope(String scope) {
+        this.scope = scope;
+        return this;
+    }
+
+    public long getExpiresIn() {
         return expiresIn;
-    }*/
+    }
+
+    public long getExpiresOn() {
+        return created + (expiresIn * 1000);
+    }
 
     public String getRefreshToken() {
         return refreshToken;
     }
 
-    private static final long MN15 = 15l * 60000l;//SSO is 20mn
-    public final long expiresOn() {
-        return this.created + MN15;
+    public CrestToken setRefreshToken(final String token) {
+		this.refreshToken = token;
+        return this;
+	}
+
+    public CrestToken setExpiresIn(long expiresIn) {
+        this.expiresIn = expiresIn;
+        return this;
     }
 }

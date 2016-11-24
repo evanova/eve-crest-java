@@ -10,7 +10,7 @@ public class CrestInventory extends CrestEntity {
     @JsonProperty
     private long quantity;
 
-    @JsonProperty
+    @JsonProperty("type")
     private CrestItem item;
 
     public int getFlag() {

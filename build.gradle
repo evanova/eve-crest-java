@@ -2,5 +2,5 @@ apply plugin: 'java'
 
 subprojects {
     group = 'org.devfleet.crest'
-    version = '0.1'
+    version = '1.0'
 }
