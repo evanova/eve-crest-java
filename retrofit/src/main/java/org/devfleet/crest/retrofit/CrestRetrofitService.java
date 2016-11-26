@@ -48,7 +48,6 @@ public interface CrestRetrofitService {
             @Path("regionId") final long regionId,
             @Query("type") final String typePath);
 
-    //https://public-crest.eveonline.com/market/10000002/orders/buy/?type=http://public-crest.eveonline.com/types/32772/
     @GET("/market/{regionId}/orders/{orderType}/")
     Call<CrestDictionary<CrestMarketOrder>> getMarketOrders (
             @Path("regionId") final long regionId,

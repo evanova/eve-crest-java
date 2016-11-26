@@ -66,11 +66,6 @@ public final class CrestClient {
     private static final String SISI_LOGIN = "sisilogin.testeveonline.com";
     private static final String SISI_CREST = "api-sisi.testeveonline.com";
 
-    public interface TokenListener {
-
-        void onTokenRefreshed(final CrestToken token);
-    }
-
     public static final class Builder {
 
         private final List<String> scopes;
