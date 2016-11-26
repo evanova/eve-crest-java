@@ -7,10 +7,12 @@ import org.devfleet.crest.model.*;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Ignore
 public final class PublicCRESTTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(PublicCRESTTest.class);
