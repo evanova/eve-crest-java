@@ -1,5 +1,8 @@
 package org.devfleet.crest.retrofit;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.scribejava.core.exceptions.OAuthException;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import okhttp3.Interceptor;
@@ -30,6 +33,7 @@ import org.devfleet.crest.model.CrestWaypoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Call;
+import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.http.GET;
@@ -37,6 +41,7 @@ import retrofit2.http.Header;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 final class CrestRetrofit implements CrestService {
@@ -140,15 +145,20 @@ final class CrestRetrofit implements CrestService {
 
         OkHttpClient.Builder retrofitClient =
                 new OkHttpClient.Builder()
-                        .addInterceptor(new UserAgentInterceptor(host, agent))
+                        .addInterceptor(new UserAgentInterceptor(host, StringUtils.isBlank(agent) ? AGENT : agent))
                         .addInterceptor(new ClientInterceptor(this));
         if (LOG.isDebugEnabled()) {
             retrofitClient = retrofitClient.addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
         }
+
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        final Converter.Factory jackson = JacksonConverterFactory.create(mapper);
+
         this.retrofit =
                 new Retrofit.Builder()
                 .baseUrl("https://" + host + "/")
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(jackson)
                 .client(retrofitClient.build())
                 .build()
                 .create(CrestRetrofitService.class);
@@ -162,7 +172,7 @@ final class CrestRetrofit implements CrestService {
         this.verify =
                 new Retrofit.Builder()
                 .baseUrl("https://" + login + "/")
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(jackson)
                 .client(verifyClient.build())
                 .build()
                 .create(VerifyService.class);
@@ -418,7 +428,7 @@ final class CrestRetrofit implements CrestService {
                 first = false;
 
                 if (!this.retrofit.addWaypoint(status.getCharacterID(), wp).execute().isSuccessful()) {
-                    LOG.error("AddWaypoint failed {}", ToStringBuilder.reflectionToString(wp));
+                    LOG.error("AddWaypoint failed {}", wp);
                     return false;
                 }
             }
@@ -436,10 +446,11 @@ final class CrestRetrofit implements CrestService {
             final List<CrestMarketHistory> returned = new ArrayList<>();
             CrestDictionary<CrestMarketHistory> dictionary;
 
-            final String typePath = href("inventory/types") + itemId + "/";
+            final String typePath = href("inventory/types/") + itemId;
             dictionary = this.retrofit.getMarketHistory(regionId, typePath).execute().body();
             if (null == dictionary) {
                 LOG.error("getMarketHistory: null dictionary {}, {}", regionId, itemId);
+                return returned;
             }
             returned.addAll(dictionary.getItems());
             return returned;
@@ -453,14 +464,15 @@ final class CrestRetrofit implements CrestService {
     @Override
     public final List<CrestMarketOrder> getMarketOrders(final long regionId, final String orderType, final long itemId) {
         try {
-            CrestDictionary<CrestMarketOrder> dictionary;
-
             // TODO: Change this so that it pulls the url from the root CREST
             // endpoint
-            final String typePath = href("inventory/types") + itemId + "/";
-
-            dictionary = this.retrofit.getMarketOrders(regionId, orderType, typePath).execute().body();
-
+            final String typePath = href("inventory/types/") + itemId;
+            CrestDictionary<CrestMarketOrder> dictionary =
+                    this.retrofit.getMarketOrders(regionId, orderType, typePath).execute().body();
+            if (null == dictionary) {
+                LOG.error("getMarketHistory: null dictionary {}, {}", regionId, itemId);
+                return Collections.emptyList();
+            }
             return dictionary.getItems();
         } catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
@@ -502,6 +514,7 @@ final class CrestRetrofit implements CrestService {
                 dictionary = retrofit.getAllMarketPrices(page).execute().body();
                 if (null == dictionary) {
                     LOG.error("getAllMarketPrices: null dictionary {}", page);
+                    break;
                 }
                 returned.addAll(dictionary.getItems());
             } while (dictionary.getPageCount() > page);
@@ -524,10 +537,15 @@ final class CrestRetrofit implements CrestService {
     }
 
     private CrestCharacterStatus verifyCharacterStatus() throws IOException {
-        return verifyCharacterStatus(true);
+        try {
+            return verifyCharacterStatus(true);
+        }
+        catch (OAuthException e) {
+            throw new IOException(e);
+        }
     }
 
-    private CrestCharacterStatus verifyCharacterStatus(boolean retry) throws IOException {
+    private CrestCharacterStatus verifyCharacterStatus(boolean retry) throws IOException, OAuthException {
         if (StringUtils.isBlank(this.refresh)) {
             throw new IOException("No refresh token available");
         }

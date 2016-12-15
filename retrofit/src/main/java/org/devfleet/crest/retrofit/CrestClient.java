@@ -2,6 +2,7 @@ package org.devfleet.crest.retrofit;
 
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.builder.api.DefaultApi20;
+import com.github.scribejava.core.exceptions.OAuthException;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import org.apache.commons.lang3.ArrayUtils;
@@ -78,6 +79,8 @@ public final class CrestClient {
         private String clientKey;
         private String clientRedirect = "http://localhost/redirect";
 
+        private String userAgent = null;
+
         public Builder() {
             this.scopes = new ArrayList<>();
             this.scopes.addAll(Arrays.asList(CrestAccess.PUBLIC_SCOPES));
@@ -122,6 +125,11 @@ public final class CrestClient {
             return this;
         }
 
+        public CrestClient.Builder agent(final String userAgent) {
+            this.userAgent = userAgent;
+            return this;
+        }
+
         public final CrestClient build() {
             return new CrestClient(
                     this.loginHost,
@@ -129,6 +137,7 @@ public final class CrestClient {
                     this.clientID,
                     this.clientKey,
                     this.clientRedirect,
+                    this.userAgent,
                     this.store,
                     this.scopes.toArray(new String[this.scopes.size()]));
         }
@@ -138,6 +147,8 @@ public final class CrestClient {
     private final String crestHost;
     private final String loginHost;
 
+    private final String userAgent;
+
     private final CrestStore store;
 
     private CrestClient(
@@ -146,11 +157,14 @@ public final class CrestClient {
             final String clientID,
             final String clientKey,
             final String callback,
+            final String userAgent,
             final CrestStore store,
             final String... scopes) {
 
         this.crestHost = crestHost;
         this.loginHost = loginHost;
+        this.userAgent = userAgent;
+
         this.store = store;
 
         StringBuilder scope = new StringBuilder();
@@ -203,7 +217,7 @@ public final class CrestClient {
             final OAuth2AccessToken token = this.oAuth.getAccessToken(authCode);
             return save(token);
         }
-        catch (IOException e) {
+        catch (OAuthException | IOException e) {
             LOG.error(e.getMessage(), e);
             return null;
         }
@@ -218,7 +232,7 @@ public final class CrestClient {
             }
             return existing;
         }
-        catch (IOException e) {
+        catch (OAuthException | IOException e) {
             LOG.error(e.getMessage(), e);
             return null;
         }
@@ -229,7 +243,7 @@ public final class CrestClient {
     }
 
     public CrestService newCrestService(final String refresh) {
-        return new CrestRetrofit(this.crestHost, this.loginHost, this.oAuth, this.store, refresh);
+        return new CrestRetrofit(this.crestHost, this.loginHost, this.oAuth, this.store, refresh, this.userAgent);
     }
 
     private CrestToken save(final OAuth2AccessToken token) {

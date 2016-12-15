@@ -57,6 +57,52 @@ public final class CrestAccess {
         MASKS = Collections.unmodifiableMap(m);
     };
 
+    public static final Map<String, String> DESCRIPTIONS;
+    static {
+        final Map<String, String> m = new HashMap<>();
+        m.put("publicData", "Publicly available information.");
+        m.put("characterAccountRead", "Read your character's account information.");
+        m.put("characterAssetsRead", "Read your character's assets.");
+        m.put("characterBookmarksRead", "Read your character's bookmarks.");
+        m.put("characterCalendarRead", "Read your character's calendar.");
+        m.put("characterChatChannelsRead", "Read a list of the chat channels your character is in.");
+        m.put("characterClonesRead", "Read a list of your character's clones.");
+        m.put("characterContactsRead", "Read your character's contacts.");
+        m.put("characterContactsWrite", "Create and update your character's contacts.");
+        m.put("characterFactionalWarfareRead", "Read your character's FW information.");
+        m.put("characterFittingRead", "Read all of the saved fits for a character.");
+        m.put("characterFittingWrite", "Create new saved fits as well as delete existing ones.");
+        m.put("characterIndustryJobsRead", "Read your character's industry jobs.");
+        m.put("characterKillsRead", "Read your character's killmails. Only killmail that the character is the victim or the finalBlow will be returned with this scope.");
+        m.put("characterLocationRead", "Read your character's current location.");
+        m.put("characterMailRead", "Read your character's mail.");
+        m.put("characterMarketOrdersRead", "Read your character's market orders.");
+        m.put("characterMedalsRead", "Read your character's medals.");
+        m.put("characterNavigationWrite", "Set your auto-pilot waypoints on your client.");
+        m.put("characterNotificationsRead", "Read your character's notifications.");
+        m.put("characterResearchRead", "Read your character's research information.");
+        m.put("characterSkillsRead", "Read your character's skills.");
+        m.put("characterWalletRead", "Read your character's wallet.");
+        m.put("fleetRead", "");
+        m.put("fleetWrite", "");
+        m.put("structureVulnUpdate", "");
+        m.put("corporationWalletRead", "Read your corporation's wallet.");
+        m.put("corporationAssetsRead", "Read your corporation's assets.");
+        m.put("corporationMedalsRead", "Read your corporation's medals list.");
+        m.put("corporationContactsRead", "Read your corporation's contacts.");
+        m.put("corporationFactionalWarfareRead", "Read your corporation's FW information.");
+        m.put("corporationIndustryJobsRead", "Read your corporation's industry jobs.");
+        m.put("corporationKillsRead", "Read your corporation's killmails.");
+        m.put("corporationMembersRead", "Read your corporation's members list.");
+        m.put("corporationMarketOrdersRead", "Read your corporation's market orders.");
+        m.put("corporationStructuresRead", "Read your corporation's structures information.");
+        m.put("corporationShareholdersRead","Read your corporation's shareholders information.");
+        m.put("corporationContractsRead", "Read your corporation's contracts.");
+        m.put("corporationBookmarksRead", "Read your corporation's bookmarks.");
+
+        DESCRIPTIONS = Collections.unmodifiableMap(m);
+    }
+
     public static final String[] PUBLIC_SCOPES = {
             "publicData"
     };
