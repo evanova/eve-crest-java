@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Ignore
 public final class PublicCRESTTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(PublicCRESTTest.class);
