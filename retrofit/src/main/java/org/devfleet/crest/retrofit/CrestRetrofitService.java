@@ -21,6 +21,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -71,6 +72,7 @@ public interface CrestRetrofitService {
             @Path("characterId") final long characterId);
 
     @POST("/characters/{characterId}/navigation/waypoints/")
+    @Headers("Content-Type: application/vnd.ccp.eve.PostWaypoint-v1+json; charset=utf-8")
     Call<Void> addWaypoint(
             @Path("characterId") final long characterId,
             @Body final CrestWaypoint waypoint);
@@ -86,7 +88,8 @@ public interface CrestRetrofitService {
             @Path("contactId") final long contactID);
 
     @POST("/characters/{characterId}/contacts/")
-    Call<CrestContact> postContact(
+    @Headers("Content-Type: application/vnd.ccp.eve.ContactCreate-v1+json; charset=utf-8")
+    Call<Void> postContact(
             @Path("characterId") final long characterId,
             @Body final CrestContact contact);
 
@@ -101,7 +104,8 @@ public interface CrestRetrofitService {
             @Query("page") final int page);
 
     @POST("/characters/{characterId}/fittings/")
-    Call<CrestFitting> postFitting(
+    @Headers("Content-Type: application/vnd.ccp.eve.FittingCreate-v1+json; charset=utf-8")
+    Call<Void> postFitting(
             @Path("characterId") final long characterId,
             @Body final CrestFitting fitting);
 
@@ -118,6 +122,7 @@ public interface CrestRetrofitService {
             @Query("page") final int page);
 
     @PUT("/characters/{characterId}/fleets/{fleetId}/")
+    @Headers("Content-Type: application/vnd.ccp.eve.FleetUpdate-v1+json; charset=utf-8")
     Call<Void> putFleet(
             @Path("characterId") final long charId,
             @Path("fleetId") final long fleetId,
@@ -132,6 +137,7 @@ public interface CrestRetrofitService {
 
     //invite characters to the fleet
     @POST("/characters/{characterId}/fleets/{fleetId}/members/")
+    @Headers("Content-Type: application/vnd.ccp.eve.FleetMemberInvite-v1+json; charset=utf-8")
     Call<Void> postFleetMember(
             @Path("characterId") final long charId,
             @Path("fleetId") final long fleetId,
@@ -153,6 +159,7 @@ public interface CrestRetrofitService {
 
     //create a new wing
     @POST("/characters/{characterId}/fleets/{fleetId}/wings/")
+    @Headers("Content-Type: application/vnd.ccp.eve.FleetWingCreate-v1+json; charset=utf-8")
     Call<Void> postFleetWing(
             @Path("characterId") final long charId,
             @Path("fleetId") final long fleetId,
@@ -160,6 +167,7 @@ public interface CrestRetrofitService {
 
     //rename the wing
     @PUT("/characters/{characterId}/fleets/{fleetId}/wings/{wingId}/")
+    @Headers("Content-Type: application/vnd.ccp.eve.FleetWingUpdate-v1+json; charset=utf-8")
     Call<Void> putFleetWing(
             @Path("characterId") final long charId,
             @Path("fleetId") final long fleetId,
@@ -168,6 +176,7 @@ public interface CrestRetrofitService {
 
     //delete the wing
     @DELETE("/characters/{characterId}/fleets/{fleetId}/wings/{wingId}/")
+    @Headers("Content-Type: application/vnd.ccp.eve.FleetWingDelete-v1+json; charset=utf-8")
     Call<Void> deleteFleetWing(
             @Path("characterId") final long charId,
             @Path("fleetId") final long fleetId,
@@ -175,6 +184,7 @@ public interface CrestRetrofitService {
 
     //create a new squad in that wing
     @POST("/characters/{characterId}/fleets/{fleetId}/wings/{wingId}/squads/")
+    @Headers("Content-Type: application/vnd.ccp.eve.FleetSquadCreate-v1+json; charset=utf-8")
     Call<Void> postFleetSquad(
             @Path("characterId") final long charId,
             @Path("fleetId") final long fleetId,
@@ -183,6 +193,7 @@ public interface CrestRetrofitService {
 
     //rename the squad
     @PUT("/characters/{characterId}/fleets/{fleetId}/wings/{wingId}/squads/{squadId}/")
+    @Headers("Content-Type: application/vnd.ccp.eve.FleetSquadUpdate-v1+json; charset=utf-8")
     Call<Void> putFleetSquad(
             @Path("characterId") final long charId,
             @Path("fleetId") final long fleetId,
@@ -192,12 +203,11 @@ public interface CrestRetrofitService {
 
     //delete the squad
     @DELETE("/characters/{characterId}/fleets/{fleetId}/wings/{wingId}/squads/{squadId}/")
+    @Headers("Content-Type: application/vnd.ccp.eve.FleetSquadDelete-v1+json; charset=utf-8")
     Call<Void> deleteFleetSquad(
             @Path("characterId") final long charId,
             @Path("fleetId") final long fleetId,
             @Path("wingId") final long wingId,
             @Path("squadId") final long squadId);
-/*
-Added /characters/{characterId}/loyaltypoints/ to list all of the loyalty points a character has
-Added /characters/{characterId}/opportunities/ which lists all of the opportunities a character has completed*/
+
 }

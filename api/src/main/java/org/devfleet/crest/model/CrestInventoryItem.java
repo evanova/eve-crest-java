@@ -2,7 +2,7 @@ package org.devfleet.crest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CrestInventory extends CrestEntity {
+public class CrestInventoryItem extends CrestEntity {
 
     @JsonProperty
     private int flag;
@@ -23,5 +23,17 @@ public class CrestInventory extends CrestEntity {
 
     public CrestItem getItem() {
         return item;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setItem(CrestItem item) {
+        this.item = item;
     }
 }

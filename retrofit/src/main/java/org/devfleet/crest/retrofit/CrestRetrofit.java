@@ -8,17 +8,16 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.devfleet.crest.CrestService;
 import org.devfleet.crest.model.CrestCharacter;
 import org.devfleet.crest.model.CrestCharacterStatus;
 import org.devfleet.crest.model.CrestContact;
 import org.devfleet.crest.model.CrestDictionary;
 import org.devfleet.crest.model.CrestFitting;
+import org.devfleet.crest.model.CrestInventoryItem;
 import org.devfleet.crest.model.CrestItem;
 import org.devfleet.crest.model.CrestLocation;
 import org.devfleet.crest.model.CrestMarketBulkOrder;
@@ -34,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Call;
 import retrofit2.Converter;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.http.GET;
@@ -63,7 +63,7 @@ final class CrestRetrofit implements CrestService {
         }
 
         @Override
-        public Response intercept(Chain chain) throws IOException {
+        public okhttp3.Response intercept(Chain chain) throws IOException {
             Request.Builder builder =
                     chain
                     .request()
@@ -86,7 +86,7 @@ final class CrestRetrofit implements CrestService {
         }
 
         @Override
-        public Response intercept(Chain chain) throws IOException {
+        public okhttp3.Response intercept(Chain chain) throws IOException {
             Request.Builder builder =
                     chain
                         .request()
@@ -331,7 +331,14 @@ final class CrestRetrofit implements CrestService {
             sudo.setName("");
             contact.setContact(sudo);
 
-            return this.retrofit.postContact(status.getCharacterID(), contact).execute().isSuccessful();
+            final Response r = this.retrofit.postContact(status.getCharacterID(), contact).execute();
+            if (r.isSuccessful()) {
+                return true;
+            }
+
+            LOG.warn("addContact: {}\n{}", r.message(), r.errorBody().string());
+            return false;
+
         }
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
@@ -343,7 +350,13 @@ final class CrestRetrofit implements CrestService {
     public final boolean deleteContact(long contactID) {
         try {
             final CrestCharacterStatus status = verifyCharacterStatus();
-            return this.retrofit.deleteContact(status.getCharacterID(), contactID).execute().isSuccessful();
+            Response<Void> r = this.retrofit.deleteContact(status.getCharacterID(), contactID).execute();
+            if (r.isSuccessful()) {
+                return true;
+            }
+
+            LOG.warn("deleteContact: {}\n{}", r.message(), r.errorBody().string());
+            return false;
         }
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
@@ -383,7 +396,17 @@ final class CrestRetrofit implements CrestService {
     public final boolean addFitting(CrestFitting fitting) {
         try {
             final CrestCharacterStatus status = verifyCharacterStatus();
-            return this.retrofit.postFitting(status.getCharacterID(), fitting).execute().isSuccessful();
+            fitting.getShip().setHref(href("inventory/types/" + fitting.getShip().getId()));
+            for (CrestInventoryItem i: fitting.getInventory()) {
+                i.getItem().setHref(href("inventory/types/" + i.getItem().getId()));
+            }
+            final Response r = this.retrofit.postFitting(status.getCharacterID(), fitting).execute();
+            if (r.isSuccessful()) {
+                return true;
+            }
+
+            LOG.warn("addFitting: {}\n{}", r.message(), r.errorBody().string());
+            return false;
         }
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
@@ -396,7 +419,13 @@ final class CrestRetrofit implements CrestService {
 
         try {
             final CrestCharacterStatus status = verifyCharacterStatus();
-            return this.retrofit.deleteFitting(status.getCharacterID(), fittingID).execute().isSuccessful();
+            final Response<Void> r = this.retrofit.deleteFitting(status.getCharacterID(), fittingID).execute();
+            if (r.isSuccessful()) {
+                return true;
+            }
+
+            LOG.warn("deleteFitting: {}\n{}", r.message(), r.errorBody().string());
+            return false;
         }
         catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
@@ -427,8 +456,9 @@ final class CrestRetrofit implements CrestService {
                 wp.getSolarSystem().setHref(href("/solarsystems/" + wp.getSolarSystem().getId()));
                 first = false;
 
-                if (!this.retrofit.addWaypoint(status.getCharacterID(), wp).execute().isSuccessful()) {
-                    LOG.error("AddWaypoint failed {}", wp);
+                final Response<Void> r = this.retrofit.addWaypoint(status.getCharacterID(), wp).execute();
+                if (!r.isSuccessful()) {
+                    LOG.warn("addWaypoint: {}\n{}", r.message(), r.errorBody().string());
                     return false;
                 }
             }
