@@ -67,6 +67,8 @@ public final class CrestClient {
     private static final String SISI_LOGIN = "sisilogin.testeveonline.com";
     private static final String SISI_CREST = "api-sisi.testeveonline.com";
 
+    private static final String AGENT = "eve-crest-java (https://github.com/evanova/eve-crest-java)";
+
     public static final class Builder {
 
         private final List<String> scopes;
@@ -79,7 +81,9 @@ public final class CrestClient {
         private String clientKey;
         private String clientRedirect = "http://localhost/redirect";
 
-        private String userAgent = null;
+        private String userAgent = AGENT;
+
+        private long timeout = 30L * 1000L;
 
         public Builder() {
             this.scopes = new ArrayList<>();
@@ -116,6 +120,11 @@ public final class CrestClient {
             return this;
         }
 
+        public CrestClient.Builder timeout(final long timeoutInMillis) {
+            this.timeout = timeoutInMillis;
+            return this;
+        }
+
         public CrestClient.Builder scopes(final String... scopes) {
             for (String s: scopes) {
                 if (!this.scopes.contains(s)) {
@@ -139,6 +148,7 @@ public final class CrestClient {
                     this.clientRedirect,
                     this.userAgent,
                     this.store,
+                    this.timeout,
                     this.scopes.toArray(new String[this.scopes.size()]));
         }
     }
@@ -150,7 +160,7 @@ public final class CrestClient {
     private final String userAgent;
 
     private final CrestStore store;
-
+    private final long timeout;
     private CrestClient(
             final String loginHost,
             final String crestHost,
@@ -159,12 +169,13 @@ public final class CrestClient {
             final String callback,
             final String userAgent,
             final CrestStore store,
+            final long timeout,
             final String... scopes) {
 
         this.crestHost = crestHost;
         this.loginHost = loginHost;
         this.userAgent = userAgent;
-
+        this.timeout = timeout;
         this.store = store;
 
         StringBuilder scope = new StringBuilder();
@@ -239,11 +250,11 @@ public final class CrestClient {
     }
 
     public CrestService newCrestService() {
-        return new CrestRetrofit(this.crestHost, this.loginHost, this.oAuth, this.store);
+        return new CrestRetrofit(this.crestHost, this.loginHost, this.oAuth, this.store, this.userAgent, this.timeout, null);
     }
 
     public CrestService newCrestService(final String refresh) {
-        return new CrestRetrofit(this.crestHost, this.loginHost, this.oAuth, this.store, refresh, this.userAgent);
+        return new CrestRetrofit(this.crestHost, this.loginHost, this.oAuth, this.store, this.userAgent, this.timeout, refresh);
     }
 
     private CrestToken save(final OAuth2AccessToken token) {

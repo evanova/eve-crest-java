@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 final class CrestRetrofit implements CrestService {
 
@@ -52,8 +53,6 @@ final class CrestRetrofit implements CrestService {
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(CrestRetrofit.class);
-
-    private static final String AGENT = "eve-crest-java (https://github.com/evanova/eve-crest-java)";
 
     private static final class ClientInterceptor implements Interceptor {
         private final CrestRetrofit cr;
@@ -110,26 +109,10 @@ final class CrestRetrofit implements CrestService {
             final String host,
             final String login,
             final OAuth20Service oAuth,
-            final CrestStore store) {
-        this(host, login, oAuth, store, null, AGENT);
-    }
-
-    protected CrestRetrofit(
-            final String host,
-            final String login,
-            final OAuth20Service oAuth,
             final CrestStore store,
+            final String agent,
+            final long timeoutInMillis,
             final String refresh) {
-        this(host, login, oAuth, store, refresh, AGENT);
-    }
-
-    protected CrestRetrofit(
-            final String host,
-            final String login,
-            final OAuth20Service oAuth,
-            final CrestStore store,
-            final String refresh,
-            final String agent) {
 
         Validate.isTrue(StringUtils.isNotBlank(host), "host parameter cannot be empty.");
         Validate.isTrue(StringUtils.isNotBlank(login), "login parameter cannot be empty.");
@@ -145,7 +128,8 @@ final class CrestRetrofit implements CrestService {
 
         OkHttpClient.Builder retrofitClient =
                 new OkHttpClient.Builder()
-                        .addInterceptor(new UserAgentInterceptor(host, StringUtils.isBlank(agent) ? AGENT : agent))
+                        .readTimeout(timeoutInMillis, TimeUnit.MILLISECONDS)
+                        .addInterceptor(new UserAgentInterceptor(host, agent))
                         .addInterceptor(new ClientInterceptor(this));
         if (LOG.isDebugEnabled()) {
             retrofitClient = retrofitClient.addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));

@@ -19,8 +19,8 @@ public final class CrestAccess {
     public static final Map<String, Long> MASKS;
     static {
         final Map<String, Long> m = new HashMap<>();
-        m.put("characterAccountRead", 33554432l);
-        m.put("characterStatsRead", 16777216l);
+        m.put("characterAccountRead", 8 | 33554432l);
+        m.put("characterStatsRead", 8 | 16777216l);
         m.put("characterWalletRead", 1l | 2097152l | 4194304l);
         m.put("characterAssetsRead", 2l | 134217728l);
         m.put("characterCalendarRead", 4l | 1048576l);
